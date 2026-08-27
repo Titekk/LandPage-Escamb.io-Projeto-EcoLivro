@@ -1304,12 +1304,12 @@
   <div id="bloco-manifesto-fechamento" class="modular-deck-section w-full space-y-6 sm:space-y-10 py-6 sm:py-8">
 
     <!-- SCENE 3: PINNED CINEMATIC TEXT REVEAL MANIFESTO DECK (GSAP ScrollTrigger Pinning, Anime.js & Lenis) -->
-    <div id="manifesto-pin-wrapper" class="w-full relative min-h-screen flex items-center justify-center py-2 sm:py-6">
-      <section id="manifesto" class="cinematic-deck is-revealed relative w-full mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] bg-[#070912] border border-white/[0.08] shadow-2xl p-6 sm:p-14 md:p-20 flex flex-col justify-center items-center text-center overflow-hidden font-alpina min-h-[75vh] sm:min-h-[82vh]" data-text-reveal="container">
+    <div id="manifesto-pin-wrapper" class="w-full relative min-h-screen flex items-center justify-center py-4 sm:py-6 overflow-hidden">
+      <section id="manifesto" class="cinematic-deck is-revealed relative w-full max-w-6xl mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] bg-[#070912] border border-white/[0.08] shadow-2xl p-6 sm:p-14 md:p-20 flex flex-col justify-center items-center text-center overflow-hidden font-alpina min-h-[82vh] sm:min-h-[88vh]" data-text-reveal="container">
         
         <!-- Ambient Reactive Background Glow Orb -->
         <div id="manifesto-ambient-glow" class="absolute inset-0 pointer-events-none opacity-20 -z-10 flex items-center justify-center transition-opacity duration-700">
-          <div class="w-[300px] sm:w-[580px] h-[300px] sm:h-[580px] rounded-full bg-cyan-500/20 blur-[110px] transform-gpu"></div>
+          <div class="w-[320px] sm:w-[640px] h-[320px] sm:h-[640px] rounded-full bg-cyan-500/20 blur-[120px] transform-gpu"></div>
         </div>
 
         <!-- Subtle Tech Grid -->
@@ -1322,15 +1322,15 @@
             // MANIFESTO DE ECONOMIA CIRCULAR
           </div>
 
-          <div id="manifesto-progress-badge" class="font-mono text-[11px] sm:text-xs text-slate-400 bg-white/[0.04] border border-white/10 px-3.5 py-1 rounded-full flex items-center gap-2 shadow-sm">
-            <span>PROGRESSO:</span>
+          <div id="manifesto-progress-badge" class="font-mono text-[11px] sm:text-xs text-slate-400 bg-white/[0.04] border border-white/10 px-3.5 py-1 rounded-full flex items-center gap-2 shadow-sm transition-all">
+            <span id="manifesto-lock-status">🔒 LEITURA FIXADA:</span>
             <span class="text-cyan-400 font-bold font-mono" id="manifesto-progress-percent">0% LIDO</span>
           </div>
         </div>
 
         <!-- Top Reading Progress Track -->
-        <div class="w-full max-w-4xl h-2 bg-white/[0.06] rounded-full overflow-hidden mb-6 sm:mb-10 border border-white/5">
-          <div id="manifesto-progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-300 w-0 transition-all duration-75 rounded-full shadow-[0_0_16px_rgba(34,211,238,0.8)]"></div>
+        <div class="w-full max-w-4xl h-2.5 bg-white/[0.06] rounded-full overflow-hidden mb-6 sm:mb-10 border border-white/5">
+          <div id="manifesto-progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-300 w-0 transition-all duration-75 rounded-full shadow-[0_0_18px_rgba(34,211,238,0.85)]"></div>
         </div>
 
         <!-- Editorial Large Manifesto Copy with Scrolled Text Highlight (Gt Alpina Condensed) -->
@@ -1343,7 +1343,7 @@
         <!-- Scroll Action Hint with Anime.js icon bounce -->
         <div class="mt-6 sm:mt-10 font-mono text-xs text-slate-400 flex items-center gap-2">
           <i data-lucide="arrow-down" class="w-4 h-4 animate-smooth-float text-cyan-400" id="manifesto-arrow-cue"></i>
-          <span id="manifesto-cue-text">DESLIZE PARA REVELAR O MANIFESTO</span>
+          <span id="manifesto-cue-text">DESLIZE PARA AVANÇAR NO TEXTO (100% PARA SAIR)</span>
         </div>
 
       </section>
@@ -1919,6 +1919,7 @@
       const manifestoTarget = document.querySelector('.text-reveal-target');
       const progressBar = document.getElementById('manifesto-progress-bar');
       const progressPercent = document.getElementById('manifesto-progress-percent');
+      const lockStatus = document.getElementById('manifesto-lock-status');
       const ambientGlow = document.getElementById('manifesto-ambient-glow');
       const cueText = document.getElementById('manifesto-cue-text');
       const arrowCue = document.getElementById('manifesto-arrow-cue');
@@ -1973,7 +1974,8 @@
           }
 
           if (pct >= 100) {
-            if (cueText) cueText.innerHTML = '<span class="text-cyan-400 font-bold">MANIFESTO 100% CONCLUÍDO &bull; CONTINUE O SCROLL</span>';
+            if (lockStatus) lockStatus.innerHTML = '<span class="text-cyan-400 font-bold">🔓 CONCLUÍDO:</span>';
+            if (cueText) cueText.innerHTML = '<span class="text-cyan-400 font-bold">✓ MANIFESTO 100% CONCLUÍDO &bull; CONTINUE O SCROLL PARA SAIR ↓</span>';
             if (arrowCue) arrowCue.style.display = 'none';
 
             if (!isCelebrated && typeof anime !== 'undefined') {
@@ -1992,7 +1994,8 @@
             }
           } else {
             if (isCelebrated && pct < 85) isCelebrated = false;
-            if (cueText) cueText.textContent = 'DESLIZE PARA REVELAR O MANIFESTO';
+            if (lockStatus) lockStatus.textContent = '🔒 LEITURA FIXADA:';
+            if (cueText) cueText.textContent = 'DESLIZE PARA AVANÇAR NO TEXTO (100% PARA SAIR)';
             if (arrowCue) arrowCue.style.display = 'inline-block';
           }
         }
@@ -2006,9 +2009,10 @@
             pin: true,
             pinSpacing: true,
             start: 'top top',
-            end: '+=180%',
-            scrub: 0.6,
+            end: '+=2800',
+            scrub: 0.5,
             anticipatePin: 1,
+            invalidateOnRefresh: true,
             onUpdate: (self) => {
               updateProgress(self.progress);
             }
