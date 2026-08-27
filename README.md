@@ -7,8 +7,7 @@
 ## 📚 Sumário da Documentação
 
 - 📄 **[Especificação do Produto (PRODUCT.md)](file:///C:/Users/titet/Apresenta%C3%A7%C3%A3o_IdentidadeVisual/PRODUCT.md):** Visão estratégica, público-alvo, princípios de produto, conformidade WCAG e stack tecnológica.
-- 🎨 **[Defesa da Identidade Visual (Defesa_Identidade_Visual.md)](file:///C:/Users/titet/Apresenta%C3%A7%C3%A3o_IdentidadeVisual/Defesa_Identidade_Visual.md):** Fundamentação conceitual da marca, psicologia de cores do sistema Void Obsidian, tipografia e diretrizes de design.
-- 🎙️ **[Roteiro de Apresentação (Roteiro.txt)](file:///C:/Users/titet/Apresenta%C3%A7%C3%A3o_IdentidadeVisual/Roteiro.txt):** Discurso completo estruturado para apresentação perante o professor e a banca avaliadora.
+ sistema Void Obsidian, tipografia e diretrizes de design.
 - 📜 **[Histórico e Evolução de Mudanças (HISTORICO_E_EVOLUCAO.md)](file:///C:/Users/titet/Apresenta%C3%A7%C3%A3o_IdentidadeVisual/HISTORICO_E_EVOLUCAO.md):** Registro cronológico de todas as decisões, pivots (desmonetização da moeda fictícia), refatorações e marcos técnicos.
 - 🌐 **[Landing Page Oficial (index.html)](file:///C:/Users/titet/Apresenta%C3%A7%C3%A3o_IdentidadeVisual/index.html):** Interface web interativa com WebGL Shader, busca em tempo real, switch de módulos e manifesto scroll-driven.
 
