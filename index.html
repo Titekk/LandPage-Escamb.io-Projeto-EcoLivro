@@ -329,6 +329,12 @@
       transform: translateY(0%);
     }
 
+    .text-roll-unit.is-active .roll-top,
+    .text-roll-unit.text-cyan-400 .roll-top {
+      color: #22D3EE;
+      text-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .cinematic-deck,
       .anime-hero-elem,
@@ -406,26 +412,83 @@
   <!-- ========================================================================= -->
   <div id="bloco-apresentacao-pilares" class="modular-deck-section w-full space-y-6 sm:space-y-10">
 
-    <!-- TOP-LEFT CORNER BRAND HEADER (Geist for brand, Geist Mono for actions) -->
-    <header class="w-full pt-6 sm:pt-10 px-4 sm:px-10 md:px-16 flex items-center justify-between bg-transparent z-40 relative pointer-events-auto anime-nav-left">
+    <!-- TOP-LEFT CORNER BRAND HEADER & INTEGRATED VERTICAL NAVIGATION -->
+    <header class="w-full pt-6 sm:pt-10 px-4 sm:px-10 md:px-16 flex items-start justify-between bg-transparent z-40 relative pointer-events-auto">
       
-      <!-- Top-Left: Brand & Monogram Glyph (Geist Typography) -->
-      <a href="#inicio" data-scroll-to="#inicio" class="flex items-center gap-2.5 sm:gap-3.5 group" aria-label="Escamb.io - Início">
-        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white/[0.05] border border-white/12 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400/70 group-hover:bg-cyan-400/10 group-hover:scale-105 transition-all shadow-sm flex-shrink-0">
-          <svg class="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L15 6L12 10L9 6L12 2Z"/>
-            <path d="M22 12L18 15L14 12L18 9L22 12Z"/>
-            <path d="M12 22L9 18L12 14L15 18L12 22Z"/>
-            <path d="M2 12L6 9L10 12L6 15L2 12Z"/>
-          </svg>
+      <!-- Top-Left Container: Brand + Category Badge + Navigation Menu (Geist & Geist Mono) -->
+      <div class="flex flex-col items-start gap-3.5 sm:gap-5 anime-nav-left">
+        
+        <!-- Brand & Monogram Glyph (Aumentado para equilibrar com os itens) -->
+        <a href="#inicio" data-scroll-to="#inicio" class="flex items-center gap-3 sm:gap-4.5 group" aria-label="Escamb.io - Início">
+          <div class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl bg-white/[0.06] border border-white/15 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400/80 group-hover:bg-cyan-400/15 group-hover:scale-105 transition-all shadow-lg flex-shrink-0">
+            <svg class="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L15 6L12 10L9 6L12 2Z"/>
+              <path d="M22 12L18 15L14 12L18 9L22 12Z"/>
+              <path d="M12 22L9 18L12 14L15 18L12 22Z"/>
+              <path d="M2 12L6 9L10 12L6 15L2 12Z"/>
+            </svg>
+          </div>
+          <span class="font-brand font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-white">
+            escamb<span class="text-cyan-400">.io</span>
+          </span>
+        </a>
+
+        <!-- Badge Category Header (Abaixo do nome da marca) -->
+        <div class="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-cyan-400/[0.08] border border-cyan-400/25 text-cyan-300 font-alpina text-xs sm:text-sm font-semibold tracking-wide shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+          REDE COMUNITÁRIA &bull; TROCA DIRETA
         </div>
-        <span class="font-brand font-black text-xl sm:text-2xl md:text-3xl tracking-tighter text-white">
-          escamb<span class="text-cyan-400">.io</span>
-        </span>
-      </a>
+
+        <!-- GIANT STACKED HEADER NAVIGATION in Geist Mono (Diminuído para caber no cabeçalho) -->
+        <nav class="flex flex-col items-start space-y-1 sm:space-y-1.5 select-none font-header" aria-label="Navegação Principal">
+          
+          <a href="#inicio" data-scroll-to="#inicio" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight transition-colors" data-roll="INÍCIO">
+              INÍCIO
+            </span>
+          </a>
+
+          <a href="#pilares" data-scroll-to="#pilares" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight transition-colors" data-roll="PILARES">
+              PILARES
+            </span>
+          </a>
+
+          <a href="#matriz-paridade" data-scroll-to="#matriz-paridade" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight transition-colors" data-roll="PARIDADE">
+              PARIDADE
+            </span>
+          </a>
+
+          <a href="#como-funciona" data-scroll-to="#como-funciona" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit is-active font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.45)]" data-roll="COMO USAR">
+              COMO USAR
+            </span>
+          </a>
+
+          <a href="#manifesto" data-scroll-to="#manifesto" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight transition-colors" data-roll="MANIFESTO">
+              MANIFESTO
+            </span>
+          </a>
+
+          <a href="#catalogo" data-scroll-to="#catalogo" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight transition-colors" data-roll="CATÁLOGO">
+              CATÁLOGO
+            </span>
+          </a>
+
+          <a href="#cadastro" data-scroll-to="#cadastro" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight text-cyan-400 hover:text-cyan-300 transition-colors" data-roll="ENTRAR">
+              ENTRAR
+            </span>
+          </a>
+
+        </nav>
+      </div>
 
       <!-- Top-Right: Header Floating Pill (Geist Mono) -->
-      <div class="flex items-center gap-2 sm:gap-4 anime-nav-right font-header">
+      <div class="flex items-center gap-2 sm:gap-4 anime-nav-right font-header pt-1">
         <div class="hidden sm:flex items-center p-1 rounded-full bg-white/[0.04] border border-white/10 text-xs font-header font-semibold">
           <button 
             type="button" 
@@ -457,69 +520,22 @@
       </div>
     </header>
 
-    <!-- SCENE 1: CINEMATIC HERO DECK WITH TRANSLATED STACKED SKIPER58 TEXTROLL NAVIGATION (pt-BR) -->
-    <section id="inicio" class="cinematic-deck is-revealed relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-5 sm:p-12 md:p-18 overflow-hidden shadow-2xl text-center">
+    <!-- SCENE 1: CINEMATIC HERO DECK (pt-BR) -->
+    <section id="inicio" class="cinematic-deck is-revealed relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-6 sm:p-12 md:p-18 overflow-hidden shadow-2xl text-center">
       
       <!-- Subtle crisp background grid lines -->
       <div class="absolute inset-0 crisp-tech-grid opacity-30 pointer-events-none -z-20" aria-hidden="true"></div>
 
-      <div class="max-w-5xl mx-auto relative z-10">
+      <div class="max-w-5xl mx-auto relative z-10 py-6 sm:py-10">
         
-        <!-- Badge Category Header (Gt Alpina Condensed) -->
-        <div class="anime-hero-elem inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-400/[0.08] border border-cyan-400/25 text-cyan-300 font-alpina text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
-          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-          REDE COMUNITÁRIA &bull; TROCA DIRETA
-        </div>
-
-        <!-- GIANT STACKED HEADER NAVIGATION in Geist Mono (Traduzido para Português + @beui/scroll-to) -->
-        <nav class="anime-hero-elem flex flex-col items-center justify-center text-center my-3 sm:my-8 space-y-0.5 sm:space-y-1.5 select-none font-header" aria-label="Navegação Principal Monumental">
-          
-          <a href="#inicio" data-scroll-to="#inicio" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="INÍCIO">
-              INÍCIO
-            </span>
-          </a>
-
-          <a href="#pilares" data-scroll-to="#pilares" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="PILARES">
-              PILARES
-            </span>
-          </a>
-
-          <a href="#matriz-paridade" data-scroll-to="#matriz-paridade" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="PARIDADE">
-              PARIDADE
-            </span>
-          </a>
-
-          <a href="#como-funciona" data-scroll-to="#como-funciona" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="COMO USAR">
-              COMO USAR
-            </span>
-          </a>
-
-          <a href="#manifesto" data-scroll-to="#manifesto" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="MANIFESTO">
-              MANIFESTO
-            </span>
-          </a>
-
-          <a href="#catalogo" data-scroll-to="#catalogo" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="CATÁLOGO">
-              CATÁLOGO
-            </span>
-          </a>
-
-          <a href="#cadastro" data-scroll-to="#cadastro" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter text-cyan-400" data-roll="ENTRAR">
-              ENTRAR
-            </span>
-          </a>
-
-        </nav>
+        <!-- Main Headline in Gt Alpina Condensed -->
+        <h1 class="anime-hero-elem font-alpina text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-tight sm:leading-none mb-6 sm:mb-8">
+          Escambo Colaborativo <br class="hidden sm:inline" />
+          <span class="text-cyan-400">Sem Moeda Real</span>
+        </h1>
 
         <!-- Subtítulo & Explicação: Gt Alpina Condensed -->
-        <p class="anime-hero-elem font-alpina text-lg sm:text-2xl md:text-3xl lg:text-4xl text-slate-200 max-w-3xl mx-auto font-medium leading-snug mb-8 sm:mb-10 hero-lead-text px-2">
+        <p class="anime-hero-elem font-alpina text-lg sm:text-2xl md:text-3xl text-slate-200 max-w-3xl mx-auto font-medium leading-snug mb-8 sm:mb-10 hero-lead-text px-2">
           Troque livros, componentes &amp; serviços diretamente para impulsionar seus estudos na <span class="highlight-underline">comunidade escolar</span>
         </p>
 
