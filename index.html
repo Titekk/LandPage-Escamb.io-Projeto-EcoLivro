@@ -250,21 +250,41 @@
       will-change: transform;
     }
 
-    /* Cinematic Film Deck Slide */
+    /* Skiper 31 3D Perspective Character & Div Dispersion Engine */
+    .skiper31-perspective-stage {
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+
+    .skiper31-char {
+      display: inline-block;
+      will-change: transform, opacity;
+      transform-style: preserve-3d;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .skiper31-card {
+      will-change: transform, opacity;
+      transform-style: preserve-3d;
+      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Outcrowd Floating Deck Style */
     .cinematic-deck {
       opacity: 0;
-      transform: translateY(50px) scale(0.97);
-      background-color: rgba(8, 10, 16, 0.82);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      transform: translateY(45px) scale(0.96);
+      background-color: rgba(8, 10, 16, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      will-change: transform, opacity;
-      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease;
+      will-change: transform, opacity, box-shadow;
+      transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
     }
 
     .cinematic-deck.is-revealed {
       opacity: 1;
       transform: translateY(0px) scale(1);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px -10px rgba(34, 211, 238, 0.05);
     }
 
     .anime-hero-elem {
@@ -1700,7 +1720,90 @@
 
       // Initialize Text Reveal & Kinetic Typography
       initBeuiTextReveal();
+
+      // Initialize Skiper 31 3D Perspective Character & Card Dispersion on Scroll
+      initSkiper31ScrollEffects();
     });
+
+    // 5. Skiper 31 3D Perspective Character & Card Dispersion on Scroll Engine
+    function initSkiper31ScrollEffects() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      // A. Character / Word 3D Perspective Dispersion on Scroll for Headings
+      const headings = document.querySelectorAll('.editorial-heading, #inicio h1');
+      headings.forEach(heading => {
+        const raw = heading.innerText.trim();
+        const words = raw.split(/\s+/);
+        const centerIndex = Math.floor(words.length / 2);
+
+        heading.classList.add('skiper31-perspective-stage');
+        heading.innerHTML = words.map((word, index) => {
+          const dist = index - centerIndex;
+          return `<span class="skiper31-char inline-block mr-2" data-dist="${dist}">${word}</span>`;
+        }).join(' ');
+
+        const chars = heading.querySelectorAll('.skiper31-char');
+
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+          gsap.fromTo(chars, {
+            x: (i) => (i - centerIndex) * 35,
+            rotateX: (i) => (i - centerIndex) * 20,
+            opacity: 0.15,
+            scale: 0.92,
+          }, {
+            x: 0,
+            rotateX: 0,
+            opacity: 1,
+            scale: 1,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: heading,
+              start: 'top 90%',
+              end: 'top 45%',
+              scrub: 1.2,
+            }
+          });
+        }
+      });
+
+      // B. Card & Div 3D Dispersion / Fan Inward on Scroll (Outcrowd Deck Style)
+      const gridContainers = document.querySelectorAll('#pilares .grid, #catalogo-grid, #como-funciona .grid');
+      gridContainers.forEach(container => {
+        const cards = Array.from(container.children);
+        if (!cards.length) return;
+        const centerIndex = (cards.length - 1) / 2;
+
+        container.classList.add('skiper31-perspective-stage');
+
+        cards.forEach((card, index) => {
+          card.classList.add('skiper31-card');
+          const dist = index - centerIndex;
+
+          if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            gsap.fromTo(card, {
+              x: dist * 45,
+              rotateY: dist * 8,
+              y: Math.abs(dist) * 20 + 30,
+              scale: 0.90,
+              opacity: 0.25,
+            }, {
+              x: 0,
+              rotateY: 0,
+              y: 0,
+              scale: 1,
+              opacity: 1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: container,
+                start: 'top 85%',
+                end: 'top 35%',
+                scrub: 1.4,
+              }
+            });
+          }
+        });
+      });
+    }
 
     // Dedicated Anime.js Card Hover Physics Engine
     function initCardHoverAnimations() {
