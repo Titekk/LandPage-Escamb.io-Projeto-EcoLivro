@@ -419,6 +419,35 @@
       text-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
     }
 
+    /* EldoraUI ScaleLetterText 3D Interactive Letter Scaling Engine */
+    .scale-letter-text-container {
+      perspective: 1000px;
+      transform-style: preserve-3d;
+      will-change: transform;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scale-letter-unit {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      user-select: none;
+      margin-right: 0.02em;
+      letter-spacing: -0.05em;
+      will-change: transform, filter, text-shadow;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: center bottom;
+      transform-style: preserve-3d;
+    }
+
+    .scale-letter-unit.text-cyan-400 {
+      color: #22D3EE !important;
+      text-shadow: 0 0 18px rgba(34, 211, 238, 0.55);
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .cinematic-deck,
       .anime-hero-elem,
@@ -430,7 +459,8 @@
       }
       .text-roll-unit .roll-top,
       .text-roll-unit .roll-bot,
-      .beui-reveal-unit {
+      .beui-reveal-unit,
+      .scale-letter-unit {
         transition: none !important;
         opacity: 1 !important;
       }
@@ -545,7 +575,7 @@
           </a>
 
           <a href="#como-funciona" data-scroll-to="#como-funciona" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit is-active font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.45)]" data-roll="COMO USAR">
+            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight transition-colors" data-roll="COMO USAR">
               COMO USAR
             </span>
           </a>
@@ -563,7 +593,7 @@
           </a>
 
           <a href="#cadastro" data-scroll-to="#cadastro" class="group block py-0.5 focus:outline-none header-link">
-            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight text-cyan-400 hover:text-cyan-300 transition-colors" data-roll="ENTRAR">
+            <span class="text-roll-unit font-header font-black text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight transition-colors" data-roll="ENTRAR">
               ENTRAR
             </span>
           </a>
@@ -612,10 +642,23 @@
 
       <div class="max-w-5xl mx-auto relative z-10 py-6 sm:py-10">
         
-        <!-- Main Headline in Gt Alpina Condensed with Cursor-Driven Particle Typography -->
-        <div id="hero-particle-container" class="anime-hero-elem w-full h-[140px] sm:h-[200px] md:h-[260px] lg:h-[300px] flex items-center justify-center relative touch-none select-none mb-4 sm:mb-6">
-          <canvas id="hero-particle-canvas" class="block w-full h-full cursor-crosshair"></canvas>
-          <h1 class="sr-only">Escamb.io</h1>
+        <!-- Main Headline: Eldora UI ScaleLetterText Interactive Typography -->
+        <div class="anime-hero-elem w-full flex items-center justify-center relative select-none mb-4 sm:mb-6 py-2 sm:py-6">
+          <h1 
+            id="hero-scale-letter-text" 
+            class="scale-letter-text-container font-display text-center text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black -tracking-widest text-white leading-none flex items-center justify-center flex-wrap"
+            aria-label="escamb.io"
+          >
+            <span class="scale-letter-unit" data-letter="e">e</span>
+            <span class="scale-letter-unit" data-letter="s">s</span>
+            <span class="scale-letter-unit" data-letter="c">c</span>
+            <span class="scale-letter-unit" data-letter="a">a</span>
+            <span class="scale-letter-unit" data-letter="m">m</span>
+            <span class="scale-letter-unit" data-letter="b">b</span>
+            <span class="scale-letter-unit text-cyan-400" data-letter=".">.</span>
+            <span class="scale-letter-unit text-cyan-400" data-letter="i">i</span>
+            <span class="scale-letter-unit text-cyan-400" data-letter="o">o</span>
+          </h1>
         </div>
 
         <!-- Subtítulo & Explicação: Gt Alpina Condensed -->
@@ -1756,200 +1799,112 @@
       // Initialize Skiper 31 3D Perspective Character & Card Dispersion on Scroll
       initSkiper31ScrollEffects();
 
-      // Initialize Cursor-Driven Particle Typography for Escamb.io
-      initHeroParticleTypography();
+      // Initialize Eldora UI ScaleLetterText for Escamb.io
+      initScaleLetterText();
     });
 
     // -------------------------------------------------------------------
-    // @componentry/cursor-driven-particle-typography Engine (Escamb.io)
+    // @eldoraui/scale-letter-text Interactive Engine (Escamb.io)
     // -------------------------------------------------------------------
-    class ParticleNode {
-      constructor(x, y, size, color, dispersion, returnSpd) {
-        this.x = x + (Math.random() - 0.5) * 10;
-        this.y = y + (Math.random() - 0.5) * 10;
-        this.originX = x;
-        this.originY = y;
-        this.vx = (Math.random() - 0.5) * 5;
-        this.vy = (Math.random() - 0.5) * 5;
-        this.size = size;
-        this.color = color;
-        this.dispersion = dispersion;
-        this.returnSpd = returnSpd;
-      }
+    function initScaleLetterText() {
+      const container = document.getElementById('hero-scale-letter-text');
+      if (!container) return;
 
-      update(mouseX, mouseY) {
-        const dx = mouseX - this.x;
-        const dy = mouseY - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const interactionRadius = 120;
+      const letterElements = Array.from(container.querySelectorAll('.scale-letter-unit'));
+      if (!letterElements.length) return;
 
-        if (distance < interactionRadius && mouseX !== -1000 && mouseY !== -1000) {
-          const forceDirectionX = dx / distance;
-          const forceDirectionY = dy / distance;
-          const force = (interactionRadius - distance) / interactionRadius;
+      function updateStyles(hoveredIndex) {
+        letterElements.forEach((el, index) => {
+          const isHovered = hoveredIndex === index;
+          const distance = hoveredIndex >= 0 ? Math.abs(index - hoveredIndex) : 99;
 
-          const repulsionX = forceDirectionX * force * this.dispersion;
-          const repulsionY = forceDirectionY * force * this.dispersion;
+          let scale = 1;
+          let translateY = 0;
+          let rotateX = 0;
+          let brightness = 1;
+          let zIndex = 1;
+          let translateZ = 0;
 
-          this.vx -= repulsionX;
-          this.vy -= repulsionY;
-        }
-
-        this.vx += (this.originX - this.x) * this.returnSpd;
-        this.vy += (this.originY - this.y) * this.returnSpd;
-
-        this.vx *= 0.85;
-        this.vy *= 0.85;
-
-        const distToOrigin = Math.sqrt(
-          Math.pow(this.x - this.originX, 2) + Math.pow(this.y - this.originY, 2)
-        );
-        if (distToOrigin < 1 && Math.random() > 0.95) {
-          this.vx += (Math.random() - 0.5) * 0.2;
-          this.vy += (Math.random() - 0.5) * 0.2;
-        }
-
-        this.x += this.vx;
-        this.y += this.vy;
-      }
-
-      draw(ctx) {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function initHeroParticleTypography() {
-      const container = document.getElementById('hero-particle-container');
-      const canvas = document.getElementById('hero-particle-canvas');
-      if (!container || !canvas) return;
-
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
-      if (!ctx) return;
-
-      let animationFrameId;
-      let particles = [];
-      let mouseX = -1000;
-      let mouseY = -1000;
-      let containerWidth = 0;
-      let containerHeight = 0;
-
-      const text = 'Escamb.io';
-      const fontFamily = '"Gt Alpina Condensed"';
-      const dispersionStrength = 16;
-      const returnSpeed = 0.08;
-
-      function init() {
-        containerWidth = container.clientWidth;
-        containerHeight = container.clientHeight;
-        if (containerWidth === 0 || containerHeight === 0) return;
-
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = containerWidth * dpr;
-        canvas.height = containerHeight * dpr;
-        canvas.style.width = `${containerWidth}px`;
-        canvas.style.height = `${containerHeight}px`;
-
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.scale(dpr, dpr);
-        ctx.clearRect(0, 0, containerWidth, containerHeight);
-
-        const particleSize = containerWidth < 640 ? 1.4 : 1.9;
-        const particleDensity = containerWidth < 640 ? 4 : 5;
-
-        // Responsive font size for Escamb.io
-        const effectiveFontSize = Math.min(180, Math.max(56, containerWidth * 0.18));
-        ctx.font = `900 ${effectiveFontSize}px ${fontFamily}`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillText(text, containerWidth / 2, containerHeight / 2);
-
-        const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        particles = [];
-
-        const step = Math.max(1, Math.floor(particleDensity * dpr));
-        for (let y = 0; y < textCoordinates.height; y += step) {
-          for (let x = 0; x < textCoordinates.width; x += step) {
-            const index = (y * textCoordinates.width + x) * 4;
-            const alpha = textCoordinates.data[index + 3] || 0;
-
-            if (alpha > 120) {
-              const logicalX = x / dpr;
-              const logicalY = y / dpr;
-
-              // Color .io with electric cyan accent, and Escamb with crisp white
-              const isSuffix = logicalX > (containerWidth / 2 + effectiveFontSize * 0.7);
-              const pColor = isSuffix ? '#22D3EE' : '#FFFFFF';
-
-              particles.push(
-                new ParticleNode(
-                  logicalX,
-                  logicalY,
-                  particleSize,
-                  pColor,
-                  dispersionStrength,
-                  returnSpeed
-                )
-              );
+          if (hoveredIndex >= 0) {
+            if (isHovered) {
+              scale = 1.45;
+              translateY = -22;
+              rotateX = -15;
+              brightness = 1.35;
+              zIndex = 10;
+              translateZ = 35;
+            } else if (distance === 1) {
+              scale = 1.22;
+              translateY = -12;
+              rotateX = -8;
+              brightness = 1.18;
+              zIndex = 5;
+              translateZ = 18;
+            } else if (distance === 2) {
+              scale = 1.1;
+              translateY = -6;
+              rotateX = -4;
+              brightness = 1.08;
+              zIndex = 2;
+              translateZ = 8;
             }
           }
+
+          el.style.transform = `perspective(1000px) translateY(${translateY}px) rotateX(${rotateX}deg) scale(${scale}) translateZ(${translateZ}px)`;
+          el.style.filter = `brightness(${brightness})`;
+          el.style.zIndex = zIndex;
+
+          const isCyan = el.classList.contains('text-cyan-400');
+          if (hoveredIndex >= 0 && distance <= 2) {
+            if (isCyan) {
+              el.style.textShadow = '0 10px 28px rgba(34,211,238,0.7), 0 2px 6px rgba(0,0,0,0.6)';
+            } else {
+              el.style.textShadow = '0 10px 28px rgba(255,255,255,0.4), 0 2px 6px rgba(0,0,0,0.6)';
+            }
+          } else {
+            if (isCyan) {
+              el.style.textShadow = '0 0 18px rgba(34,211,238,0.55)';
+            } else {
+              el.style.textShadow = '';
+            }
+          }
+        });
+      }
+
+      // Track pointer move across letters for ultra-fluid response
+      container.addEventListener('pointermove', (e) => {
+        const target = e.target.closest('.scale-letter-unit');
+        if (target) {
+          const idx = letterElements.indexOf(target);
+          if (idx !== -1) {
+            updateStyles(idx);
+          }
         }
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, containerWidth, containerHeight);
-        for (let i = 0; i < particles.length; i++) {
-          particles[i].update(mouseX, mouseY);
-          particles[i].draw(ctx);
-        }
-        animationFrameId = requestAnimationFrame(animate);
-      }
-
-      function onMouseMove(e) {
-        const rect = canvas.getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
-        mouseY = e.clientY - rect.top;
-      }
-
-      function onMouseLeave() {
-        mouseX = -1000;
-        mouseY = -1000;
-      }
-
-      function onTouchMove(e) {
-        if (!e.touches[0]) return;
-        const rect = canvas.getBoundingClientRect();
-        mouseX = e.touches[0].clientX - rect.left;
-        mouseY = e.touches[0].clientY - rect.top;
-      }
-
-      window.addEventListener('resize', () => {
-        init();
       });
 
-      canvas.addEventListener('mousemove', onMouseMove);
-      canvas.addEventListener('mouseleave', onMouseLeave);
-      canvas.addEventListener('touchstart', onTouchMove, { passive: true });
-      canvas.addEventListener('touchmove', onTouchMove, { passive: true });
-      canvas.addEventListener('touchend', onMouseLeave, { passive: true });
+      container.addEventListener('pointerleave', () => {
+        updateStyles(-1);
+      });
 
-      if (document.fonts) {
-        document.fonts.ready.then(() => {
-          setTimeout(() => {
-            init();
-            animate();
-          }, 80);
-        });
-      } else {
-        setTimeout(() => {
-          init();
-          animate();
-        }, 150);
-      }
+      // Individual letter triggers for desktop mouse
+      letterElements.forEach((el, index) => {
+        el.addEventListener('mouseenter', () => updateStyles(index));
+        el.addEventListener('mouseleave', () => updateStyles(-1));
+      });
+
+      // Touch screen support
+      container.addEventListener('touchmove', (e) => {
+        if (!e.touches[0]) return;
+        const touch = e.touches[0];
+        const el = document.elementFromPoint(touch.clientX, touch.clientY);
+        const letterEl = el ? el.closest('.scale-letter-unit') : null;
+        if (letterEl) {
+          const idx = letterElements.indexOf(letterEl);
+          if (idx !== -1) updateStyles(idx);
+        }
+      }, { passive: true });
+
+      container.addEventListener('touchend', () => updateStyles(-1), { passive: true });
     }
 
     // 5. Skiper 31 3D Perspective Character & Card Dispersion on Scroll Engine
@@ -1957,7 +1912,7 @@
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
       // A. Character / Word 3D Perspective Dispersion on Scroll for Headings
-      const headings = document.querySelectorAll('.editorial-heading, #inicio h1');
+      const headings = document.querySelectorAll('.editorial-heading:not(#hero-scale-letter-text)');
       headings.forEach(heading => {
         const raw = heading.innerText.trim();
         const words = raw.split(/\s+/);
