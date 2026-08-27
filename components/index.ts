@@ -13,3 +13,4 @@ export * from "./ui/developer-autocomplete";
 export * from "./ui/scroll-to";
 export * from "./v1/skiper58";
 export * from "./v1/skiper31";
+export * from "./ui/cursor-driven-particle-typography";

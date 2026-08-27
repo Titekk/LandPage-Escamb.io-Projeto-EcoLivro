@@ -612,11 +612,11 @@
 
       <div class="max-w-5xl mx-auto relative z-10 py-6 sm:py-10">
         
-        <!-- Main Headline in Gt Alpina Condensed -->
-        <h1 class="anime-hero-elem font-alpina text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-tight sm:leading-none mb-6 sm:mb-8">
-          Escambo Colaborativo <br class="hidden sm:inline" />
-          <span class="text-cyan-400">Sem Moeda Real</span>
-        </h1>
+        <!-- Main Headline in Gt Alpina Condensed with Cursor-Driven Particle Typography -->
+        <div id="hero-particle-container" class="anime-hero-elem w-full h-[140px] sm:h-[200px] md:h-[260px] lg:h-[300px] flex items-center justify-center relative touch-none select-none mb-4 sm:mb-6">
+          <canvas id="hero-particle-canvas" class="block w-full h-full cursor-crosshair"></canvas>
+          <h1 class="sr-only">Escamb.io</h1>
+        </div>
 
         <!-- Subtítulo & Explicação: Gt Alpina Condensed -->
         <p class="anime-hero-elem font-alpina text-lg sm:text-2xl md:text-3xl text-slate-200 max-w-3xl mx-auto font-medium leading-snug mb-8 sm:mb-10 hero-lead-text px-2">
@@ -1755,7 +1755,202 @@
 
       // Initialize Skiper 31 3D Perspective Character & Card Dispersion on Scroll
       initSkiper31ScrollEffects();
+
+      // Initialize Cursor-Driven Particle Typography for Escamb.io
+      initHeroParticleTypography();
     });
+
+    // -------------------------------------------------------------------
+    // @componentry/cursor-driven-particle-typography Engine (Escamb.io)
+    // -------------------------------------------------------------------
+    class ParticleNode {
+      constructor(x, y, size, color, dispersion, returnSpd) {
+        this.x = x + (Math.random() - 0.5) * 10;
+        this.y = y + (Math.random() - 0.5) * 10;
+        this.originX = x;
+        this.originY = y;
+        this.vx = (Math.random() - 0.5) * 5;
+        this.vy = (Math.random() - 0.5) * 5;
+        this.size = size;
+        this.color = color;
+        this.dispersion = dispersion;
+        this.returnSpd = returnSpd;
+      }
+
+      update(mouseX, mouseY) {
+        const dx = mouseX - this.x;
+        const dy = mouseY - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const interactionRadius = 120;
+
+        if (distance < interactionRadius && mouseX !== -1000 && mouseY !== -1000) {
+          const forceDirectionX = dx / distance;
+          const forceDirectionY = dy / distance;
+          const force = (interactionRadius - distance) / interactionRadius;
+
+          const repulsionX = forceDirectionX * force * this.dispersion;
+          const repulsionY = forceDirectionY * force * this.dispersion;
+
+          this.vx -= repulsionX;
+          this.vy -= repulsionY;
+        }
+
+        this.vx += (this.originX - this.x) * this.returnSpd;
+        this.vy += (this.originY - this.y) * this.returnSpd;
+
+        this.vx *= 0.85;
+        this.vy *= 0.85;
+
+        const distToOrigin = Math.sqrt(
+          Math.pow(this.x - this.originX, 2) + Math.pow(this.y - this.originY, 2)
+        );
+        if (distToOrigin < 1 && Math.random() > 0.95) {
+          this.vx += (Math.random() - 0.5) * 0.2;
+          this.vy += (Math.random() - 0.5) * 0.2;
+        }
+
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+
+      draw(ctx) {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initHeroParticleTypography() {
+      const container = document.getElementById('hero-particle-container');
+      const canvas = document.getElementById('hero-particle-canvas');
+      if (!container || !canvas) return;
+
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (!ctx) return;
+
+      let animationFrameId;
+      let particles = [];
+      let mouseX = -1000;
+      let mouseY = -1000;
+      let containerWidth = 0;
+      let containerHeight = 0;
+
+      const text = 'Escamb.io';
+      const fontFamily = '"Gt Alpina Condensed"';
+      const dispersionStrength = 16;
+      const returnSpeed = 0.08;
+
+      function init() {
+        containerWidth = container.clientWidth;
+        containerHeight = container.clientHeight;
+        if (containerWidth === 0 || containerHeight === 0) return;
+
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = containerWidth * dpr;
+        canvas.height = containerHeight * dpr;
+        canvas.style.width = `${containerWidth}px`;
+        canvas.style.height = `${containerHeight}px`;
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, containerWidth, containerHeight);
+
+        const particleSize = containerWidth < 640 ? 1.4 : 1.9;
+        const particleDensity = containerWidth < 640 ? 4 : 5;
+
+        // Responsive font size for Escamb.io
+        const effectiveFontSize = Math.min(180, Math.max(56, containerWidth * 0.18));
+        ctx.font = `900 ${effectiveFontSize}px ${fontFamily}`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText(text, containerWidth / 2, containerHeight / 2);
+
+        const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        particles = [];
+
+        const step = Math.max(1, Math.floor(particleDensity * dpr));
+        for (let y = 0; y < textCoordinates.height; y += step) {
+          for (let x = 0; x < textCoordinates.width; x += step) {
+            const index = (y * textCoordinates.width + x) * 4;
+            const alpha = textCoordinates.data[index + 3] || 0;
+
+            if (alpha > 120) {
+              const logicalX = x / dpr;
+              const logicalY = y / dpr;
+
+              // Color .io with electric cyan accent, and Escamb with crisp white
+              const isSuffix = logicalX > (containerWidth / 2 + effectiveFontSize * 0.7);
+              const pColor = isSuffix ? '#22D3EE' : '#FFFFFF';
+
+              particles.push(
+                new ParticleNode(
+                  logicalX,
+                  logicalY,
+                  particleSize,
+                  pColor,
+                  dispersionStrength,
+                  returnSpeed
+                )
+              );
+            }
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, containerWidth, containerHeight);
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update(mouseX, mouseY);
+          particles[i].draw(ctx);
+        }
+        animationFrameId = requestAnimationFrame(animate);
+      }
+
+      function onMouseMove(e) {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+      }
+
+      function onMouseLeave() {
+        mouseX = -1000;
+        mouseY = -1000;
+      }
+
+      function onTouchMove(e) {
+        if (!e.touches[0]) return;
+        const rect = canvas.getBoundingClientRect();
+        mouseX = e.touches[0].clientX - rect.left;
+        mouseY = e.touches[0].clientY - rect.top;
+      }
+
+      window.addEventListener('resize', () => {
+        init();
+      });
+
+      canvas.addEventListener('mousemove', onMouseMove);
+      canvas.addEventListener('mouseleave', onMouseLeave);
+      canvas.addEventListener('touchstart', onTouchMove, { passive: true });
+      canvas.addEventListener('touchmove', onTouchMove, { passive: true });
+      canvas.addEventListener('touchend', onMouseLeave, { passive: true });
+
+      if (document.fonts) {
+        document.fonts.ready.then(() => {
+          setTimeout(() => {
+            init();
+            animate();
+          }, 80);
+        });
+      } else {
+        setTimeout(() => {
+          init();
+          animate();
+        }, 150);
+      }
+    }
 
     // 5. Skiper 31 3D Perspective Character & Card Dispersion on Scroll Engine
     function initSkiper31ScrollEffects() {
