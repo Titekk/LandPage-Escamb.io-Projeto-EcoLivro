@@ -1927,16 +1927,21 @@
       if (manifestoContainer && manifestoTarget) {
         const rawText = manifestoTarget.innerText.trim();
         const groups = toWordGroups(rawText);
-        const highlightKeywords = [
-          'escamb.io', 'nenhum', 'livro', 'didático', 'periférico', 'conhecimento', 
-          'acadêmico', 'estudantes', 'professores', 'transformar', 'colaborativa', 
-          'transparente', '100%', 'livre', 'dinheiro', 'real'
-        ];
 
-        manifestoTarget.innerHTML = groups.map((g) => {
+        let inAccentPhrase = false;
+        manifestoTarget.innerHTML = groups.map((g, idx) => {
           const whole = g.text + g.trailing;
           const clean = g.text.toLowerCase().replace(/[^\wÀ-ÿ%]/g, '');
-          const isAccent = highlightKeywords.some(kw => clean === kw || clean.includes(kw));
+
+          // Highlight "estudantes" and "professores"
+          const isSingleAccent = (clean === 'estudantes' || clean === 'professores');
+
+          // Highlight the entire phrase "você realmente precisa — de forma colaborativa, transparente e 100% livre de dinheiro real"
+          if (clean === 'realmente' || (clean === 'você' && groups[idx + 1] && groups[idx + 1].text.toLowerCase().includes('realmente'))) {
+            inAccentPhrase = true;
+          }
+
+          const isAccent = isSingleAccent || inAccentPhrase;
           return `<span class="manifesto-word beui-reveal-unit font-alpina ${isAccent ? 'is-accent' : ''}" data-accent="${isAccent}">${whole}</span>`;
         }).join('');
 
