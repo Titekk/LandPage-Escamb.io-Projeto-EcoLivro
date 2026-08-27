@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Escamb.io — Plataforma Comunitária de Trocas Sem Dinheiro Real</title>
+  <meta name="description" content="Módulos de escambo colaborativo onde livros, periféricos e conhecimentos circulam diretamente entre estudantes e professores sem uso de moeda real.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+
+  <!-- Typography Resource Hints & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  
+  <!-- Geist Sans & Geist Mono via Official CDN (Brand & Header) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css">
+  
+  <!-- Google Fonts Fallbacks -->
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            brand: ['Geist Sans', 'Geist', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+            header: ['Geist Mono', '"JetBrains Mono"', '"SF Mono"', 'Consolas', 'monospace'],
+            mono: ['Geist Mono', '"JetBrains Mono"', '"SF Mono"', 'Consolas', 'monospace'],
+            alpina: ['"Gt Alpina Condensed"', '"Franklin Gothic Medium"', '"Arial Narrow"', '"Trebuchet MS"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+            editorial: ['"Gt Alpina Condensed"', '"Franklin Gothic Medium"', '"Arial Narrow"', '"Trebuchet MS"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+            display: ['"Gt Alpina Condensed"', '"Franklin Gothic Medium"', '"Arial Narrow"', '"Trebuchet MS"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+            sans: ['"Season Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Arial', 'sans-serif'],
+            heading: ['"Gt Alpina Condensed"', '"Franklin Gothic Medium"', '"Arial Narrow"', 'sans-serif'],
+            body: ['"Season Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Arial', 'sans-serif'],
+            table: ['"Season Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Arial', 'sans-serif'],
+          },
+          colors: {
+            void: '#000000',
+            darkcard: '#080A0F',
+            cyan: {
+              300: '#67E8F9',
+              400: '#22D3EE',
+              500: '#06B6D4',
+              accent: '#00F2FE'
+            },
+            accent: {
+              blue: '#3B82F6',
+              cobalt: '#2563EB',
+              azure: '#38BDF8',
+              indigo: '#6366F1'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Lenis Smooth Inertia Scroll -->
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+
+  <!-- Anime.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Gt Alpina Condensed';
+      src: local('Gt Alpina Condensed'), local('GT Alpina Condensed'), local('GTAlpina-Condensed'), local('Franklin Gothic Medium'), local('Arial Narrow');
+      font-weight: 300 900;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Season Sans';
+      src: local('Season Sans'), local('SeasonSans'), local('Arial');
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+    }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+      touch-action: pan-y;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    /* General Site Typography: "Season Sans", sans-serif */
+    body {
+      font-family: "Season Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background-color: #000000;
+      color: #F1F5F9;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* 1. Brand Logo & Monogram: Geist Sans (100% Sans-Serif Fallback) */
+    .font-brand {
+      font-family: 'Geist Sans', 'Geist', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      letter-spacing: -0.055em;
+      font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    }
+
+    /* 2. Header & Monumental Navigation: Geist Mono */
+    .font-header,
+    .text-roll-unit,
+    header,
+    .header-link,
+    .nav-mono {
+      font-family: 'Geist Mono', 'JetBrains Mono', 'SF Mono', Consolas, monospace !important;
+      letter-spacing: -0.04em;
+    }
+
+    /* 3. Títulos, Subtítulos, Explicações & Manifesto: "Gt Alpina Condensed" (100% Sans-Serif Fallback) */
+    .font-alpina,
+    .font-editorial,
+    .text-reveal-target,
+    .editorial-large-copy,
+    .hero-lead-text,
+    .editorial-heading {
+      font-family: "Gt Alpina Condensed", "Franklin Gothic Medium", "Arial Narrow", "Trebuchet MS", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      letter-spacing: -0.02em;
+    }
+
+    /* 4. Tabelas Técnicas & Metadados: Season Sans */
+    .font-season,
+    .font-sans,
+    .font-body,
+    table, th, td,
+    input, textarea, select,
+    .font-table {
+      font-family: "Season Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    /* Mobile Adaptations & Safe Areas */
+    @media (max-width: 640px) {
+      input, select, textarea {
+        font-size: 16px !important; /* Previne auto-zoom indesejado no iOS Safari */
+      }
+      .text-roll-unit {
+        letter-spacing: -0.04em;
+        line-height: 0.92;
+      }
+      .cinematic-deck {
+        border-radius: 1.75rem !important;
+      }
+      .card-watermark {
+        opacity: 0.02 !important;
+      }
+    }
+
+    /* Mobile Table Touch Scroll Engine */
+    .mobile-table-scroll {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      scrollbar-width: thin;
+    }
+
+    /* Clean Minimalist Structural Grid (Sem pontos ou borrões de AI Slop) */
+    .clean-dark-grid {
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* Minimalist Dark Modules Card */
+    .minimal-dark-card {
+      background: linear-gradient(180deg, rgba(14, 17, 24, 0.90) 0%, rgba(7, 8, 12, 0.96) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, box-shadow;
+    }
+
+    .minimal-dark-card:hover {
+      border-color: rgba(34, 211, 238, 0.45);
+      box-shadow: 0 12px 28px -10px rgba(34, 211, 238, 0.10);
+    }
+
+    /* Giant Ghost Watermark Number */
+    .card-watermark {
+      font-family: 'Geist Mono', monospace;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+      user-select: none;
+      line-height: 0.85;
+      will-change: transform, opacity, color;
+      transition: color 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+      letter-spacing: -0.05em;
+      z-index: 1;
+    }
+
+    .minimal-dark-card:hover .card-watermark {
+      color: rgba(34, 211, 238, 0.16);
+    }
+
+    /* Stroke Vector Icon Container */
+    .card-icon-box {
+      background: rgba(34, 211, 238, 0.06);
+      border: 1px solid rgba(34, 211, 238, 0.22);
+      color: #22D3EE;
+      will-change: transform;
+    }
+
+    .minimal-dark-card:hover .card-icon-box {
+      border-color: rgba(34, 211, 238, 0.5);
+      background: rgba(34, 211, 238, 0.10);
+    }
+
+    /* Bottom-Right Arrow Indicator */
+    .card-arrow-btn {
+      color: #22D3EE;
+      will-change: transform;
+    }
+
+    /* Cinematic Film Deck Slide */
+    .cinematic-deck {
+      opacity: 0;
+      transform: translateY(50px) scale(0.97);
+      background-color: rgba(8, 10, 16, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      will-change: transform, opacity;
+      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease;
+    }
+
+    .cinematic-deck.is-revealed {
+      opacity: 1;
+      transform: translateY(0px) scale(1);
+    }
+
+    .anime-hero-elem {
+      opacity: 0;
+      transform: translateY(25px);
+      will-change: transform, opacity;
+    }
+
+    .anime-card-elem {
+      opacity: 0;
+      transform: translateY(35px) scale(0.97);
+      will-change: transform, opacity;
+    }
+
+    /* Manifesto Kinetic Word Reveal Units */
+    .beui-reveal-unit {
+      display: inline-block;
+      white-space: pre;
+      will-change: opacity, color;
+      transition: opacity 0.18s ease-out, color 0.18s ease-out;
+      margin-right: 0.16em;
+    }
+
+    /* Skiper58 TextRoll Kinetic Character Roll CSS Engine (Geist Mono) */
+    .text-roll-unit {
+      position: relative;
+      display: inline-flex;
+      overflow: hidden;
+      line-height: 0.88;
+      cursor: pointer;
+      user-select: none;
+      vertical-align: middle;
+      font-family: 'Geist Mono', monospace !important;
+    }
+
+    .text-roll-unit .roll-letter {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+    }
+
+    .text-roll-unit .roll-top {
+      display: inline-block;
+      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform;
+      color: #FFFFFF;
+    }
+
+    .text-roll-unit .roll-bot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: inline-block;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform;
+      color: #22D3EE;
+      text-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+    }
+
+    .text-roll-unit:hover .roll-top {
+      transform: translateY(-100%);
+    }
+
+    .text-roll-unit:hover .roll-bot {
+      transform: translateY(0%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cinematic-deck,
+      .anime-hero-elem,
+      .anime-card-elem,
+      .animate-smooth-float {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+      .text-roll-unit .roll-top,
+      .text-roll-unit .roll-bot,
+      .beui-reveal-unit {
+        transition: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    /* Smooth Floating Animation */
+    @keyframes smoothFloat {
+      0%, 100% {
+        transform: translateY(0);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(5px);
+        opacity: 1;
+      }
+    }
+    .animate-smooth-float {
+      animation: smoothFloat 2.2s ease-in-out infinite;
+    }
+
+    /* Custom Selection & Scrollbar */
+    ::selection {
+      background-color: rgba(34, 211, 238, 0.35);
+      color: #FFFFFF;
+    }
+
+    input, textarea {
+      caret-color: #22D3EE;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid #22D3EE;
+      outline-offset: 2px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #151923;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #22D3EE;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#030407] text-white selection:bg-cyan-500/30 selection:text-white relative font-alpina">
+
+  <!-- Clean Matte Void Background & Vector Shading (Zero Tacky Dots, Zero AI Slop Glows) -->
+  <div class="fixed inset-0 pointer-events-none -z-30 overflow-hidden bg-[#030407]" aria-hidden="true">
+    <canvas id="shader-bg-canvas" class="w-full h-full object-cover opacity-75"></canvas>
+    <div class="absolute inset-0 clean-dark-grid opacity-30 pointer-events-none"></div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- DIVISÃO 1: APRESENTAÇÃO, HEADER, NAVEGAÇÃO HERO & PILARES FUNDAMENTAIS -->
+  <!-- ========================================================================= -->
+  <div id="bloco-apresentacao-pilares" class="modular-deck-section w-full space-y-6 sm:space-y-10">
+
+    <!-- TOP-LEFT CORNER BRAND HEADER (Geist for brand, Geist Mono for actions) -->
+    <header class="w-full pt-6 sm:pt-10 px-4 sm:px-10 md:px-16 flex items-center justify-between bg-transparent z-40 relative pointer-events-auto anime-nav-left">
+      
+      <!-- Top-Left: Brand & Monogram Glyph (Geist Typography) -->
+      <a href="#inicio" data-scroll-to="#inicio" class="flex items-center gap-2.5 sm:gap-3.5 group" aria-label="Escamb.io - Início">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white/[0.05] border border-white/12 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400/70 group-hover:bg-cyan-400/10 group-hover:scale-105 transition-all shadow-sm flex-shrink-0">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L15 6L12 10L9 6L12 2Z"/>
+            <path d="M22 12L18 15L14 12L18 9L22 12Z"/>
+            <path d="M12 22L9 18L12 14L15 18L12 22Z"/>
+            <path d="M2 12L6 9L10 12L6 15L2 12Z"/>
+          </svg>
+        </div>
+        <span class="font-brand font-black text-xl sm:text-2xl md:text-3xl tracking-tighter text-white">
+          escamb<span class="text-cyan-400">.io</span>
+        </span>
+      </a>
+
+      <!-- Top-Right: Header Floating Pill (Geist Mono) -->
+      <div class="flex items-center gap-2 sm:gap-4 anime-nav-right font-header">
+        <div class="hidden sm:flex items-center p-1 rounded-full bg-white/[0.04] border border-white/10 text-xs font-header font-semibold">
+          <button 
+            type="button" 
+            id="tab-btn-items"
+            onclick="switchCatalogMode('items')"
+            class="px-3.5 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm transition-all focus:outline-none"
+            aria-pressed="true"
+          >
+            ITENS
+          </button>
+          <button 
+            type="button" 
+            id="tab-btn-services"
+            onclick="switchCatalogMode('services')"
+            class="px-3.5 py-1.5 rounded-full text-slate-400 hover:text-white transition-all focus:outline-none"
+            aria-pressed="false"
+          >
+            SERVIÇOS
+          </button>
+        </div>
+
+        <a 
+          href="#cadastro"
+          data-scroll-to="#cadastro" 
+          class="inline-flex items-center justify-center px-3.5 sm:px-5 py-2 text-[11px] sm:text-xs font-header font-bold uppercase tracking-wider text-white bg-white/[0.06] hover:bg-cyan-400 hover:text-slate-950 hover:border-cyan-400 border border-white/12 rounded-full transition-all active:scale-95 shadow-sm whitespace-nowrap"
+        >
+          0 R$ &bull; COMUNIDADE
+        </a>
+      </div>
+    </header>
+
+    <!-- SCENE 1: CINEMATIC HERO DECK WITH TRANSLATED STACKED SKIPER58 TEXTROLL NAVIGATION (pt-BR) -->
+    <section id="inicio" class="cinematic-deck is-revealed relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-5 sm:p-12 md:p-18 overflow-hidden shadow-2xl text-center">
+      
+      <!-- Subtle crisp background grid lines -->
+      <div class="absolute inset-0 crisp-tech-grid opacity-30 pointer-events-none -z-20" aria-hidden="true"></div>
+
+      <div class="max-w-5xl mx-auto relative z-10">
+        
+        <!-- Badge Category Header (Gt Alpina Condensed) -->
+        <div class="anime-hero-elem inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-400/[0.08] border border-cyan-400/25 text-cyan-300 font-alpina text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+          REDE COMUNITÁRIA &bull; TROCA DIRETA
+        </div>
+
+        <!-- GIANT STACKED HEADER NAVIGATION in Geist Mono (Traduzido para Português + @beui/scroll-to) -->
+        <nav class="anime-hero-elem flex flex-col items-center justify-center text-center my-3 sm:my-8 space-y-0.5 sm:space-y-1.5 select-none font-header" aria-label="Navegação Principal Monumental">
+          
+          <a href="#inicio" data-scroll-to="#inicio" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="INÍCIO">
+              INÍCIO
+            </span>
+          </a>
+
+          <a href="#pilares" data-scroll-to="#pilares" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="PILARES">
+              PILARES
+            </span>
+          </a>
+
+          <a href="#matriz-paridade" data-scroll-to="#matriz-paridade" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="PARIDADE">
+              PARIDADE
+            </span>
+          </a>
+
+          <a href="#como-funciona" data-scroll-to="#como-funciona" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="COMO USAR">
+              COMO USAR
+            </span>
+          </a>
+
+          <a href="#manifesto" data-scroll-to="#manifesto" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="MANIFESTO">
+              MANIFESTO
+            </span>
+          </a>
+
+          <a href="#catalogo" data-scroll-to="#catalogo" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter" data-roll="CATÁLOGO">
+              CATÁLOGO
+            </span>
+          </a>
+
+          <a href="#cadastro" data-scroll-to="#cadastro" class="group block py-0.5 focus:outline-none header-link">
+            <span class="text-roll-unit font-header font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight sm:tracking-tighter text-cyan-400" data-roll="ENTRAR">
+              ENTRAR
+            </span>
+          </a>
+
+        </nav>
+
+        <!-- Subtítulo & Explicação: Gt Alpina Condensed -->
+        <p class="anime-hero-elem font-alpina text-lg sm:text-2xl md:text-3xl lg:text-4xl text-slate-200 max-w-3xl mx-auto font-medium leading-snug mb-8 sm:mb-10 hero-lead-text px-2">
+          Troque livros, componentes &amp; serviços diretamente para impulsionar seus estudos na <span class="highlight-underline">comunidade escolar</span>
+        </p>
+
+        <!-- Dual Action Buttons in Gt Alpina Condensed -->
+        <div class="anime-hero-elem flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14 font-alpina w-full max-w-md sm:max-w-none mx-auto">
+          <!-- Main Action: White Pill Button -->
+          <a 
+            href="#catalogo" 
+            data-scroll-to="#catalogo"
+            class="w-full sm:w-auto inline-flex items-center justify-center h-12 min-h-[48px] px-8 bg-white hover:bg-slate-100 text-slate-950 font-alpina font-bold text-xs sm:text-sm uppercase tracking-wider rounded-full shadow-lg shadow-white/5 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+          >
+            EXPLORAR MÓDULOS &bull; 0 R$
+          </a>
+
+          <!-- Secondary Action: Dark Glass Pill Button -->
+          <a 
+            href="#como-funciona" 
+            data-scroll-to="#como-funciona"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 min-h-[48px] px-7 bg-[#0D0E15] hover:bg-[#151722] text-slate-300 hover:text-white font-alpina font-semibold text-xs sm:text-sm uppercase tracking-wider rounded-full border border-white/10 shadow-sm transition-all hover:border-cyan-400/40 active:scale-95 cursor-pointer"
+          >
+            <i data-lucide="play" class="w-3.5 h-3.5 text-cyan-400 fill-cyan-400"></i>
+            <span>COMO FUNCIONA</span>
+          </a>
+        </div>
+
+        <!-- Interactive Minimal Search Bar with Autocomplete (Gt Alpina Condensed) -->
+        <div class="anime-hero-elem max-w-lg mx-auto w-full relative font-alpina">
+          <div id="search-input-group" class="group relative flex items-center rounded-full bg-[#07090F]/95 border border-white/10 hover:border-cyan-400/50 focus-within:border-cyan-400 focus-within:ring-2 focus-within:ring-cyan-500/25 transition-all shadow-inner overflow-hidden">
+            <div class="flex items-center pl-4 pr-1 text-slate-500 pointer-events-none select-none order-first transition-colors group-focus-within:text-cyan-400">
+              <i data-lucide="search" id="search-icon-anim" class="w-4 h-4"></i>
+            </div>
+            <input 
+              type="search" 
+              id="quick-search-input"
+              aria-label="Buscar módulos no catálogo"
+              placeholder="Buscar por thinkpad, livros, figma, react..."
+              oninput="handleQuickFilter(this.value)"
+              onfocus="showAutocompletePopup()"
+              class="w-full h-12 min-h-[48px] bg-transparent text-base sm:text-sm font-alpina text-white placeholder:text-slate-500 focus:outline-none px-3 py-2 order-2"
+            >
+            <div class="flex items-center pr-4 pl-1 pointer-events-none select-none order-last">
+              <kbd id="search-kbd-shortcut" class="hidden sm:inline-flex items-center justify-center min-w-[22px] h-5 px-1.5 rounded-md font-mono text-[11px] font-bold text-white bg-white/[0.06] border border-white/10 shadow-sm transition-all group-focus-within:border-cyan-400/50 group-focus-within:text-cyan-300 group-focus-within:bg-cyan-950/60">
+                /
+              </kbd>
+            </div>
+          </div>
+
+          <!-- Autocomplete Dropdown Content -->
+          <div id="search-autocomplete-popup" class="hidden absolute top-full left-0 right-0 mt-2 z-50 rounded-2xl bg-[#080A12]/98 backdrop-blur-3xl border border-white/15 shadow-2xl p-2.5 max-h-[60vh] sm:max-h-80 overflow-y-auto text-left font-alpina text-sm">
+            <div id="autocomplete-status" class="px-3 py-2 text-xs text-slate-400 border-b border-white/5 flex items-center justify-between font-alpina">
+              <span>Módulos Sugeridos</span>
+              <span id="autocomplete-count" class="text-cyan-400 text-xs font-mono">6 DISPONÍVEIS</span>
+            </div>
+            <div id="autocomplete-list" class="space-y-1 pt-1.5">
+              <!-- Populated via script -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SCENE 1.5: 4 CORE ECOSYSTEM PILLARS (Integrado na DIV 1) -->
+    <section id="pilares" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-5 sm:p-10 md:p-14 overflow-hidden shadow-2xl font-alpina">
+      <div class="max-w-7xl mx-auto">
+        
+        <!-- Header row com Título & Subtítulo em Gt Alpina Condensed -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 sm:pb-6 border-b border-white/5 mb-6 sm:mb-8 gap-3">
+          <div>
+            <div class="flex items-center gap-2 text-cyan-400 text-xs sm:text-sm font-alpina font-bold uppercase tracking-wider mb-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              ARQUITETURA DE TROCAS &bull; PILARES
+            </div>
+            <h2 data-beui-split="word" class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight editorial-heading">
+              Pilares Fundamentais do Escamb.io
+            </h2>
+            <p class="font-alpina text-sm sm:text-base text-slate-400 mt-1">
+              Princípios estruturantes que orientam todas as trocas e conexões entre turmas.
+            </p>
+          </div>
+          <span class="font-mono text-xs text-slate-400 self-start sm:self-auto bg-white/[0.04] px-2.5 py-1 rounded-full border border-white/10">
+            4 NÚCLEOS ATIVOS
+          </span>
+        </div>
+
+        <!-- 4-Column Minimal Dark Grid in Gt Alpina Condensed -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          
+          <!-- Pillar 1: Projects (Watermark 01) -->
+          <article class="minimal-dark-card feature-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group min-h-[260px] sm:min-h-[300px]">
+            <div class="card-watermark absolute right-3 bottom-4 text-[110px] sm:text-[145px]">01</div>
+
+            <div class="relative z-10">
+              <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-6 sm:mb-10 transition-transform">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="3" y="3" width="7" height="7" rx="2"></rect>
+                  <rect x="14" y="3" width="7" height="7" rx="2"></rect>
+                  <rect x="14" y="14" width="7" height="7" rx="2"></rect>
+                  <rect x="3" y="14" width="7" height="7" rx="2"></rect>
+                </svg>
+              </div>
+
+              <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                Projetos &amp; Acervo
+              </h3>
+
+              <p class="card-desc text-xs sm:text-sm text-slate-300 leading-relaxed font-alpina max-w-[240px]">
+                Uma nova dimensão de utilidade acadêmica construída e lançada na comunidade escolar.
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-6 sm:pt-8 relative z-10">
+              <a href="#catalogo" data-scroll-to="#catalogo" class="card-arrow-btn p-2 min-h-[44px] min-w-[44px] flex items-center justify-center transition-transform" aria-label="Ver projetos no catálogo">
+                <i data-lucide="arrow-right" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[2]"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- Pillar 2: Partners (Watermark 02) -->
+          <article class="minimal-dark-card feature-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group min-h-[260px] sm:min-h-[300px]">
+            <div class="card-watermark absolute right-3 bottom-4 text-[110px] sm:text-[145px]">02</div>
+
+            <div class="relative z-10">
+              <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-6 sm:mb-10 transition-transform">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="18" cy="5" r="3"></circle>
+                  <circle cx="6" cy="12" r="3"></circle>
+                  <circle cx="18" cy="19" r="3"></circle>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+              </div>
+
+              <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                Rede de Pares
+              </h3>
+
+              <p class="card-desc text-xs sm:text-sm text-slate-300 leading-relaxed font-alpina max-w-[240px]">
+                Conectado diretamente com estudantes, laboratórios e turmas sem burocracia ou intermediários.
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-6 sm:pt-8 relative z-10">
+              <a href="#catalogo" data-scroll-to="#catalogo" class="card-arrow-btn p-2 min-h-[44px] min-w-[44px] flex items-center justify-center transition-transform" aria-label="Ver rede de pares">
+                <i data-lucide="arrow-right" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[2]"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- Pillar 3: Validators (Watermark 03) -->
+          <article class="minimal-dark-card feature-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group min-h-[260px] sm:min-h-[300px]">
+            <div class="card-watermark absolute right-3 bottom-4 text-[110px] sm:text-[145px]">03</div>
+
+            <div class="relative z-10">
+              <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-6 sm:mb-10 transition-transform">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="9" cy="12" r="6"></circle>
+                  <circle cx="15" cy="12" r="6"></circle>
+                </svg>
+              </div>
+
+              <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                Validação 1:1
+              </h3>
+
+              <p class="card-desc text-xs sm:text-sm text-slate-300 leading-relaxed font-alpina max-w-[240px]">
+                Garanta a segurança dos acordos bilaterais e fortaleça a confiança na rede acadêmica.
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-6 sm:pt-8 relative z-10">
+              <a href="#matriz-paridade" data-scroll-to="#matriz-paridade" class="card-arrow-btn p-2 min-h-[44px] min-w-[44px] flex items-center justify-center transition-transform" aria-label="Ver matriz de validação">
+                <i data-lucide="arrow-right" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[2]"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- Pillar 4: Service Providers (Watermark 04) -->
+          <article class="minimal-dark-card feature-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group min-h-[260px] sm:min-h-[300px]">
+            <div class="card-watermark absolute right-3 bottom-4 text-[110px] sm:text-[145px]">04</div>
+
+            <div class="relative z-10">
+              <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-6 sm:mb-10 transition-transform">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"></path>
+                  <polyline points="9 10 7 12 9 14"></polyline>
+                  <polyline points="15 10 17 12 15 14"></polyline>
+                </svg>
+              </div>
+
+              <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                Serviços &amp; Tutoria
+              </h3>
+
+              <p class="card-desc text-xs sm:text-sm text-slate-300 leading-relaxed font-alpina max-w-[240px]">
+                Integre suas habilidades e monitorias com a rede de troca de conhecimento do campus.
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-6 sm:pt-8 relative z-10">
+              <a href="#catalogo" data-scroll-to="#catalogo" class="card-arrow-btn p-2 min-h-[44px] min-w-[44px] flex items-center justify-center transition-transform" aria-label="Ver serviços e monitorias">
+                <i data-lucide="arrow-right" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[2]"></i>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- DIVISÃO 2: ITENS DISPONÍVEIS PARA TROCA & TABELA DE CIRCULAÇÃO / PARIDADE -->
+  <!-- ========================================================================= -->
+  <div id="bloco-catalogo-paridade" class="modular-deck-section w-full space-y-6 sm:space-y-10 py-6 sm:py-8">
+
+    <!-- SCENE 2: CINEMATIC SHOWCASE CATALOG DECK (Gt Alpina para Títulos, Subtítulos e Explicações) -->
+    <section id="catalogo" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-5 sm:p-10 md:p-16 overflow-hidden shadow-2xl font-alpina" data-anime-scroll="catalog">
+      <div class="max-w-7xl mx-auto">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 sm:pb-8 border-b border-white/5 mb-8 sm:mb-10 font-alpina text-sm gap-4">
+          <div class="flex items-center gap-2 text-slate-400">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            <span id="catalog-mode-title" class="uppercase font-bold text-white tracking-wider font-alpina text-sm sm:text-base">ITENS DISPONÍVEIS PARA TROCA</span>
+          </div>
+          
+          <div class="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+            <!-- Mobile Toggle Switcher in Catalog Header -->
+            <div class="flex sm:hidden items-center p-1 rounded-full bg-white/[0.04] border border-white/10 text-xs font-header font-semibold">
+              <button 
+                type="button" 
+                id="tab-btn-items-mobile"
+                onclick="switchCatalogMode('items')"
+                class="px-3.5 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm transition-all focus:outline-none"
+                aria-pressed="true"
+              >
+                ITENS
+              </button>
+              <button 
+                type="button" 
+                id="tab-btn-services-mobile"
+                onclick="switchCatalogMode('services')"
+                class="px-3.5 py-1.5 rounded-full text-slate-400 hover:text-white transition-all focus:outline-none"
+                aria-pressed="false"
+              >
+                SERVIÇOS
+              </button>
+            </div>
+            <span id="active-item-count" class="text-slate-500 font-mono text-xs whitespace-nowrap">6 MÓDULOS ATIVOS</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Modular Grid Cards in Gt Alpina Condensed -->
+        <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 font-alpina">
+
+          <!-- Card 1: Lenovo ThinkPad X280 -->
+          <article class="module-card item-card minimal-dark-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group relative" data-tags="tecnologia notebook thinkpad lenovo computacao programacao informatica">
+            <div class="card-watermark absolute right-3 bottom-8 text-[115px] sm:text-[145px]">01</div>
+
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-5 sm:mb-6 relative z-10">
+                <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-transform">
+                  <i data-lucide="laptop" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+                </div>
+
+                <div class="flex items-center gap-2 font-alpina text-xs">
+                  <span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-slate-300">
+                    LM &bull; 3º Ano Info
+                  </span>
+                  <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-semibold font-mono">
+                    ★ 4.9
+                  </span>
+                </div>
+              </div>
+
+              <div class="relative z-10">
+                <span class="text-xs font-alpina uppercase tracking-widest text-cyan-400/90 block mb-1 font-semibold">
+                  HARDWARE &bull; 8GB RAM &bull; 256GB SSD
+                </span>
+                <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  ThinkPad X280 Core i5
+                </h3>
+                <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed mb-5 sm:mb-6 font-alpina">
+                  Pronto para desenvolvimento web e C++. Bateria com 4h de autonomia, teclado ABNT2 e carregador original 65W USB-C.
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/5 relative z-10">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] group-hover:border-cyan-400/25 transition-all font-alpina text-xs sm:text-sm mb-3.5">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0"></span>
+                  <span class="text-[11px] text-slate-500 uppercase tracking-wider font-bold flex-shrink-0">EM TROCA:</span>
+                  <strong class="text-slate-200 text-xs sm:text-sm font-medium truncate group-hover:text-cyan-300 transition-colors font-alpina">
+                    Tablet Samsung ou Monitor 24"
+                  </strong>
+                </div>
+                <span class="text-[10px] font-mono text-cyan-400/90 border border-cyan-400/30 px-1.5 py-0.5 rounded uppercase flex-shrink-0">1:1</span>
+              </div>
+
+              <div class="flex items-center justify-between gap-3">
+                <a href="#cadastro" data-scroll-to="#cadastro" class="flex-grow h-11 sm:h-10 min-h-[44px] px-4 bg-white/[0.04] hover:bg-white text-slate-300 hover:text-slate-950 border border-white/10 hover:border-white font-alpina font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center active:scale-95">
+                  PROPOR TROCA COM LUCAS
+                </a>
+                <div class="card-arrow-btn w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-all">
+                  <i data-lucide="arrow-right" class="w-5 h-5 stroke-[2]"></i>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Livros Acadêmicos -->
+          <article class="module-card item-card minimal-dark-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group relative" data-tags="livros algoritmos clean code tanenbaum computacao">
+            <div class="card-watermark absolute right-3 bottom-8 text-[115px] sm:text-[145px]">02</div>
+
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-5 sm:mb-6 relative z-10">
+                <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-transform">
+                  <i data-lucide="book-open" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+                </div>
+
+                <div class="flex items-center gap-2 font-alpina text-xs">
+                  <span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-slate-300">
+                    BC &bull; 2º Ano Info
+                  </span>
+                  <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-semibold font-mono">
+                    ★ 5.0
+                  </span>
+                </div>
+              </div>
+
+              <div class="relative z-10">
+                <span class="text-xs font-alpina uppercase tracking-widest text-cyan-400/90 block mb-1 font-semibold">
+                  ACERVO &bull; 3 VOLUMES FÍSICOS
+                </span>
+                <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  Coleção Algoritmos &amp; Clean Code
+                </h3>
+                <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed mb-5 sm:mb-6 font-alpina">
+                  Obras de Robert Martin, Aditya Bhargava e Tanenbaum. Livros físicos sem grifos com capas impecáveis.
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/5 relative z-10">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] group-hover:border-cyan-400/25 transition-all font-alpina text-xs sm:text-sm mb-3.5">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0"></span>
+                  <span class="text-[11px] text-slate-500 uppercase tracking-wider font-bold flex-shrink-0">EM TROCA:</span>
+                  <strong class="text-slate-200 text-xs sm:text-sm font-medium truncate group-hover:text-cyan-300 transition-colors font-alpina">
+                    Cálculo 1 ou Raspberry Pi
+                  </strong>
+                </div>
+                <span class="text-[10px] font-mono text-cyan-400/90 border border-cyan-400/30 px-1.5 py-0.5 rounded uppercase flex-shrink-0">1:1</span>
+              </div>
+
+              <div class="flex items-center justify-between gap-3">
+                <a href="#cadastro" data-scroll-to="#cadastro" class="flex-grow h-11 sm:h-10 min-h-[44px] px-4 bg-white/[0.04] hover:bg-white text-slate-300 hover:text-slate-950 border border-white/10 hover:border-white font-alpina font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center active:scale-95">
+                  PROPOR TROCA COM BEATRIZ
+                </a>
+                <div class="card-arrow-btn w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-all">
+                  <i data-lucide="arrow-right" class="w-5 h-5 stroke-[2]"></i>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Teclado Mecânico Akko -->
+          <article class="module-card item-card minimal-dark-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group relative" data-tags="perifericos teclado mecanico switch akko rgb">
+            <div class="card-watermark absolute right-3 bottom-8 text-[115px] sm:text-[145px]">03</div>
+
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-5 sm:mb-6 relative z-10">
+                <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-transform">
+                  <i data-lucide="keyboard" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+                </div>
+
+                <div class="flex items-center gap-2 font-alpina text-xs">
+                  <span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-slate-300">
+                    GR &bull; Automação
+                  </span>
+                  <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-semibold font-mono">
+                    ★ 4.8
+                  </span>
+                </div>
+              </div>
+
+              <div class="relative z-10">
+                <span class="text-xs font-alpina uppercase tracking-widest text-cyan-400/90 block mb-1 font-semibold">
+                  PERIFÉRICOS &bull; SWITCH JELLY PINK
+                </span>
+                <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  Teclado Akko 3068B Plus RGB
+                </h3>
+                <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed mb-5 sm:mb-6 font-alpina">
+                  Switches lineares Jelly Pink, Bluetooth 5.0 / 2.4GHz e cabo USB-C trançado. Caixa e extrator inclusos.
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/5 relative z-10">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] group-hover:border-cyan-400/25 transition-all font-alpina text-xs sm:text-sm mb-3.5">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0"></span>
+                  <span class="text-[11px] text-slate-500 uppercase tracking-wider font-bold flex-shrink-0">EM TROCA:</span>
+                  <strong class="text-slate-200 text-xs sm:text-sm font-medium truncate group-hover:text-cyan-300 transition-colors font-alpina">
+                    Headset HyperX ou Mouse sem fio
+                  </strong>
+                </div>
+                <span class="text-[10px] font-mono text-cyan-400/90 border border-cyan-400/30 px-1.5 py-0.5 rounded uppercase flex-shrink-0">1:1</span>
+              </div>
+
+              <div class="flex items-center justify-between gap-3">
+                <a href="#cadastro" data-scroll-to="#cadastro" class="flex-grow h-11 sm:h-10 min-h-[44px] px-4 bg-white/[0.04] hover:bg-white text-slate-300 hover:text-slate-950 border border-white/10 hover:border-white font-alpina font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center active:scale-95">
+                  PROPOR TROCA COM GUILHERME
+                </a>
+                <div class="card-arrow-btn w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-all">
+                  <i data-lucide="arrow-right" class="w-5 h-5 stroke-[2]"></i>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4 (SERVIÇO): Imersão Front-end & React -->
+          <article class="module-card service-card minimal-dark-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group relative" data-tags="servicos monitoria mentoria react front-end javascript programacao">
+            <div class="card-watermark absolute right-3 bottom-8 text-[115px] sm:text-[145px]">04</div>
+
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-5 sm:mb-6 relative z-10">
+                <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-transform">
+                  <i data-lucide="code-2" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+                </div>
+
+                <div class="flex items-center gap-2 font-alpina text-xs">
+                  <span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-slate-300">
+                    RO &bull; Monitor Web
+                  </span>
+                  <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-semibold font-mono">
+                    ★ 5.0
+                  </span>
+                </div>
+              </div>
+
+              <div class="relative z-10">
+                <span class="text-xs font-alpina uppercase tracking-widest text-cyan-400/90 block mb-1 font-semibold">
+                  SERVIÇO &bull; 4H MENTORIA 1-ON-1
+                </span>
+                <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  Mentoria React &amp; Front-end Moderno
+                </h3>
+                <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed mb-5 sm:mb-6 font-alpina">
+                  2 encontros práticos de 2 horas: componentização moderna, consumo de REST APIs, Tailwind CSS e deploy automatizado na Vercel.
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/5 relative z-10">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] group-hover:border-cyan-400/25 transition-all font-alpina text-xs sm:text-sm mb-3.5">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0"></span>
+                  <span class="text-[11px] text-slate-500 uppercase tracking-wider font-bold flex-shrink-0">EM TROCA:</span>
+                  <strong class="text-slate-200 text-xs sm:text-sm font-medium truncate group-hover:text-cyan-300 transition-colors font-alpina">
+                    Aulas de SQL / MER ou Hardware
+                  </strong>
+                </div>
+                <span class="text-[10px] font-mono text-cyan-400/90 border border-cyan-400/30 px-1.5 py-0.5 rounded uppercase flex-shrink-0">1:1</span>
+              </div>
+
+              <div class="flex items-center justify-between gap-3">
+                <a href="#cadastro" data-scroll-to="#cadastro" class="flex-grow h-11 sm:h-10 min-h-[44px] px-4 bg-white/[0.04] hover:bg-white text-slate-300 hover:text-slate-950 border border-white/10 hover:border-white font-alpina font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center active:scale-95">
+                  AGENDAR MENTORIA COM RAFAEL
+                </a>
+                <div class="card-arrow-btn w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-all">
+                  <i data-lucide="arrow-right" class="w-5 h-5 stroke-[2]"></i>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5 (SERVIÇO): Design de Interface no Figma -->
+          <article class="module-card service-card minimal-dark-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group relative" data-tags="servicos design figma ui ux prototipo logotipo">
+            <div class="card-watermark absolute right-3 bottom-8 text-[115px] sm:text-[145px]">05</div>
+
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-5 sm:mb-6 relative z-10">
+                <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-transform">
+                  <i data-lucide="figma" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+                </div>
+
+                <div class="flex items-center gap-2 font-alpina text-xs">
+                  <span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-slate-300">
+                    CN &bull; Design Gráfico
+                  </span>
+                  <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-semibold font-mono">
+                    ★ 4.9
+                  </span>
+                </div>
+              </div>
+
+              <div class="relative z-10">
+                <span class="text-xs font-alpina uppercase tracking-widest text-cyan-400/90 block mb-1 font-semibold">
+                  DESIGN &bull; PROTÓTIPO TCC COMPLETO
+                </span>
+                <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  UI/UX Design System no Figma
+                </h3>
+                <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed mb-5 sm:mb-6 font-alpina">
+                  Telas completas no Figma (Desktop + Mobile), guia de componentes e fluxo de navegação para defesa acadêmica.
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/5 relative z-10">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] group-hover:border-cyan-400/25 transition-all font-alpina text-xs sm:text-sm mb-3.5">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0"></span>
+                  <span class="text-[11px] text-slate-500 uppercase tracking-wider font-bold flex-shrink-0">EM TROCA:</span>
+                  <strong class="text-slate-200 text-xs sm:text-sm font-medium truncate group-hover:text-cyan-300 transition-colors font-alpina">
+                    Revisão ABNT ou Kit Arduino
+                  </strong>
+                </div>
+                <span class="text-[10px] font-mono text-cyan-400/90 border border-cyan-400/30 px-1.5 py-0.5 rounded uppercase flex-shrink-0">1:1</span>
+              </div>
+
+              <div class="flex items-center justify-between gap-3">
+                <a href="#cadastro" data-scroll-to="#cadastro" class="flex-grow h-11 sm:h-10 min-h-[44px] px-4 bg-white/[0.04] hover:bg-white text-slate-300 hover:text-slate-950 border border-white/10 hover:border-white font-alpina font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center active:scale-95">
+                  SOLICITAR PROJETO COM CAMILA
+                </a>
+                <div class="card-arrow-btn w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-all">
+                  <i data-lucide="arrow-right" class="w-5 h-5 stroke-[2]"></i>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6: Calculadora Casio FX-991LAX -->
+          <article class="module-card item-card minimal-dark-card anime-card-elem p-5 sm:p-7 rounded-3xl flex flex-col justify-between group relative" data-tags="materiais calculadora casio engenharia exatas fisica calculo">
+            <div class="card-watermark absolute right-3 bottom-8 text-[115px] sm:text-[145px]">06</div>
+
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-5 sm:mb-6 relative z-10">
+                <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-transform">
+                  <i data-lucide="calculator" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+                </div>
+
+                <div class="flex items-center gap-2 font-alpina text-xs">
+                  <span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-slate-300">
+                    ML &bull; Eng. Elétrica
+                  </span>
+                  <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-semibold font-mono">
+                    ★ 4.8
+                  </span>
+                </div>
+              </div>
+
+              <div class="relative z-10">
+                <span class="text-xs font-alpina uppercase tracking-widest text-cyan-400/90 block mb-1 font-semibold">
+                  EXATAS &bull; 552 FUNÇÕES &bull; PAINEL SOLAR
+                </span>
+                <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  Calculadora Casio FX-991LAX
+                </h3>
+                <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed mb-5 sm:mb-6 font-alpina">
+                  Display LCD HD em português, cálculo de matrizes, integrais e derivadas numéricas. Dupla alimentação solar.
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/5 relative z-10">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] group-hover:border-cyan-400/25 transition-all font-alpina text-xs sm:text-sm mb-3.5">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0"></span>
+                  <span class="text-[11px] text-slate-500 uppercase tracking-wider font-bold flex-shrink-0">EM TROCA:</span>
+                  <strong class="text-slate-200 text-xs sm:text-sm font-medium truncate group-hover:text-cyan-300 transition-colors font-alpina">
+                    Literatura Brasileira ou Fone BT
+                  </strong>
+                </div>
+                <span class="text-[10px] font-mono text-cyan-400/90 border border-cyan-400/30 px-1.5 py-0.5 rounded uppercase flex-shrink-0">1:1</span>
+              </div>
+
+              <div class="flex items-center justify-between gap-3">
+                <a href="#cadastro" data-scroll-to="#cadastro" class="flex-grow h-11 sm:h-10 min-h-[44px] px-4 bg-white/[0.04] hover:bg-white text-slate-300 hover:text-slate-950 border border-white/10 hover:border-white font-alpina font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center active:scale-95">
+                  PROPOR TROCA COM MATHEUS
+                </a>
+                <div class="card-arrow-btn w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-all">
+                  <i data-lucide="arrow-right" class="w-5 h-5 stroke-[2]"></i>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Empty Search State -->
+          <div id="no-results-state" class="hidden col-span-full py-12 sm:py-16 text-center font-alpina text-sm text-slate-400 bg-[#07080E] rounded-3xl border border-white/6 p-6 sm:p-8">
+            <i data-lucide="search-x" class="w-8 h-8 text-slate-500 mx-auto mb-3"></i>
+            <p class="text-base font-semibold text-white mb-1 font-alpina">Nenhum módulo encontrado</p>
+            <p class="text-slate-500 text-xs mb-4 font-alpina">Tente buscar por "thinkpad", "livros", "akko", "figma" ou "react".</p>
+            <button 
+              type="button" 
+              onclick="document.getElementById('quick-search-input').value=''; handleQuickFilter('');" 
+              class="px-5 py-2.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-400 hover:text-slate-950 font-bold uppercase text-[11px] transition-all font-alpina min-h-[44px]"
+            >
+              LIMPAR BUSCA
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 2.5: TABELA DE PARIDADE E COMPARAÇÃO (Integrada na DIV 2) -->
+    <section id="matriz-paridade" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-5 sm:p-10 md:p-14 overflow-hidden shadow-2xl font-alpina">
+      <div class="max-w-7xl mx-auto">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 sm:pb-6 border-b border-white/5 mb-6 sm:mb-8 gap-3">
+          <div>
+            <div class="flex items-center gap-2 text-cyan-400 text-xs sm:text-sm font-alpina font-bold uppercase tracking-wider mb-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              MATRIZ DE PARIDADE 1:1 &bull; PRICING 0 R$
+            </div>
+            <h2 data-beui-split="word" class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight editorial-heading">
+              Tabela Comparativa de Circulação
+            </h2>
+            <p class="font-alpina text-sm sm:text-base text-slate-400 mt-1">
+              Transparência total e equivalência de valor sem transações financeiras.
+            </p>
+          </div>
+          <span class="font-mono text-xs text-slate-400 self-start sm:self-auto bg-white/[0.04] px-2.5 py-1 rounded-full border border-white/10">
+            PARIDADE EQUIVALENTE
+          </span>
+        </div>
+
+        <!-- Mobile Scroll Cue Indicator -->
+        <div class="flex items-center gap-2 mb-3 text-cyan-400/80 font-mono text-[11px] sm:hidden">
+          <i data-lucide="arrow-left-right" class="w-3.5 h-3.5 animate-pulse"></i>
+          <span>Deslize para os lados para visualizar todas as colunas</span>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#070910]/95 backdrop-blur-xl mobile-table-scroll">
+          <table class="min-w-[580px] w-full text-left font-table text-xs border-collapse font-sans">
+            <thead>
+              <tr class="border-b border-white/10 bg-white/[0.03] text-slate-300 uppercase font-semibold tracking-wider text-[11px]">
+                <th scope="col" class="py-3.5 sm:py-4 px-4 sm:px-6">Categoria</th>
+                <th scope="col" class="py-3.5 sm:py-4 px-4 sm:px-6">Módulo Ofertado</th>
+                <th scope="col" class="py-3.5 sm:py-4 px-4 sm:px-6">Contrapartida 1:1</th>
+                <th scope="col" class="py-3.5 sm:py-4 px-4 sm:px-6">Custo Monetário</th>
+                <th scope="col" class="py-3.5 sm:py-4 px-4 sm:px-6">Status da Rede</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 text-slate-300">
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-white flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Hardware
+                </td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-slate-200">ThinkPad X280 Core i5</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-400">Tablet Samsung ou Monitor 24"</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-cyan-400 font-semibold font-mono">0 R$ &bull; Troca Direta</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6"><span class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-mono">DISPONÍVEL</span></td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-white flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Conhecimento
+                </td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-slate-200">Coleção Algoritmos (3 Vol.)</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-400">Cálculo 1 ou Raspberry Pi</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-cyan-400 font-semibold font-mono">0 R$ &bull; Troca Direta</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6"><span class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-mono">DISPONÍVEL</span></td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-white flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Periféricos
+                </td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-slate-200">Teclado Mecânico Akko 3068B</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-400">Headset HyperX ou Mouse sem fio</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-cyan-400 font-semibold font-mono">0 R$ &bull; Troca Direta</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6"><span class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-mono">DISPONÍVEL</span></td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-white flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Tutoria &amp; Dev
+                </td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-slate-200">Mentoria React &amp; Front-end (4h)</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-400">Aulas de SQL / MER ou Hardware</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-cyan-400 font-semibold font-mono">0 R$ &bull; Troca Direta</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6"><span class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-mono">DISPONÍVEL</span></td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-white flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Design &amp; UI
+                </td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-slate-200">Design System Figma Completo</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-400">Revisão ABNT ou Kit Arduino</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6 text-cyan-400 font-semibold font-mono">0 R$ &bull; Troca Direta</td>
+                <td class="py-3.5 sm:py-4 px-4 sm:px-6"><span class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-mono">DISPONÍVEL</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- DIVISÃO 3: MANIFESTO, FLUXO DE TROCA, CADASTRO / ACESSO & FOOTER COMPLETO -->
+  <!-- ========================================================================= -->
+  <div id="bloco-manifesto-fechamento" class="modular-deck-section w-full space-y-6 sm:space-y-10 py-6 sm:py-8">
+
+    <!-- SCENE 3: CINEMATIC TEXT REVEAL MANIFESTO DECK (Deep Void & Electric Cyan) -->
+    <section id="manifesto" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] bg-[#070912] border border-white/[0.08] shadow-2xl p-6 sm:p-14 md:p-20 flex flex-col justify-center items-center text-center overflow-hidden font-alpina min-h-[60vh] sm:min-h-[72vh]" data-text-reveal="container">
+      
+      <!-- Section Tag -->
+      <div class="font-mono text-xs text-cyan-400 font-bold uppercase tracking-widest mb-6 sm:mb-8 flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+        // MANIFESTO DE ECONOMIA CIRCULAR
+      </div>
+
+      <!-- Editorial Large Manifesto Copy -->
+      <div class="max-w-4xl mx-auto my-auto py-2 sm:py-4">
+        <p class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.28] sm:leading-[1.2] tracking-tight text-reveal-target editorial-large-copy px-2">
+          No Escamb.io, acreditamos que nenhum livro didático, periférico ou conhecimento acadêmico deve ficar esquecido na gaveta. Conectamos estudantes e professores para transformar o que você já tem no que você realmente precisa — de forma colaborativa, transparente e 100% livre de dinheiro real.
+        </p>
+      </div>
+
+      <div class="mt-6 sm:mt-8 font-mono text-xs text-slate-400 flex items-center gap-2">
+        <i data-lucide="arrow-down" class="w-4 h-4 animate-smooth-float text-cyan-400"></i>
+        <span>DESLIZE PARA REVELAR O MANIFESTO</span>
+      </div>
+
+    </section>
+
+    <!-- SCENE 4: CINEMATIC 3-STEP FLOW DECK -->
+    <section id="como-funciona" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-5 sm:p-12 md:p-18 overflow-hidden shadow-2xl text-white font-alpina" data-anime-scroll="steps" style="content-visibility: auto; contain-intrinsic-size: 1px 650px;">
+      <div class="max-w-7xl mx-auto">
+        
+        <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
+          <div class="font-mono text-xs text-cyan-400 font-bold uppercase tracking-widest mb-2">
+            // FLUXO DE TROCA &bull; COMO USAR
+          </div>
+          <!-- Título & Subtítulo em Gt Alpina Condensed -->
+          <h2 data-beui-split="word" class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 editorial-heading">
+            Como Funciona o Escamb.io
+          </h2>
+          <p class="font-alpina text-sm sm:text-lg md:text-xl text-slate-300 leading-relaxed px-2">
+            Três passos simples para trocar qualquer item ou conhecimento sem fricção e com zero dinheiro real.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 font-alpina">
+          
+          <!-- Passo 01 -->
+          <div class="step-card minimal-dark-card anime-card-elem p-5 sm:p-8 rounded-3xl flex flex-col justify-between group relative overflow-hidden">
+            <div class="card-watermark absolute right-3 bottom-4 text-[100px] sm:text-[140px]">01</div>
+
+            <div class="relative z-10">
+              <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-5 sm:mb-6 transition-transform">
+                <i data-lucide="box" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+              </div>
+              <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-3 group-hover:text-cyan-300 transition-colors">
+                Cadastre o Módulo
+              </h3>
+              <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed font-alpina">
+                Tire fotos do livro, componente eletrônico ou mentoria que deseja oferecer e liste o que gostaria de receber em contrapartida.
+              </p>
+            </div>
+            
+            <div class="pt-5 sm:pt-6 mt-6 sm:mt-8 border-t border-white/5 flex items-center justify-between relative z-10">
+              <span class="font-mono text-[11px] sm:text-xs text-cyan-400 font-bold">// PUBLICAÇÃO IMEDIATA</span>
+              <a href="#cadastro" data-scroll-to="#cadastro" class="card-arrow-btn p-2 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Cadastrar módulo">
+                <i data-lucide="arrow-right" class="w-5 h-5 text-cyan-400 transition-transform"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Passo 02 -->
+          <div class="step-card minimal-dark-card anime-card-elem p-5 sm:p-8 rounded-3xl flex flex-col justify-between group relative overflow-hidden">
+            <div class="card-watermark absolute right-3 bottom-4 text-[100px] sm:text-[140px]">02</div>
+
+            <div class="relative z-10">
+              <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-5 sm:mb-6 transition-transform">
+                <i data-lucide="messages-square" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+              </div>
+              <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-3 group-hover:text-cyan-300 transition-colors">
+                Conecte &amp; Negocie
+              </h3>
+              <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed font-alpina">
+                Navegue pelas ofertas da turma ou receba propostas diretas de estudantes interessados no seu material anunciado.
+              </p>
+            </div>
+            
+            <div class="pt-5 sm:pt-6 mt-6 sm:mt-8 border-t border-white/5 flex items-center justify-between relative z-10">
+              <span class="font-mono text-[11px] sm:text-xs text-cyan-400 font-bold">// ACORDO BILATERAL</span>
+              <a href="#catalogo" data-scroll-to="#catalogo" class="card-arrow-btn p-2 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Ver ofertas no catálogo">
+                <i data-lucide="arrow-right" class="w-5 h-5 text-cyan-400 transition-transform"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Passo 03 -->
+          <div class="step-card minimal-dark-card anime-card-elem p-5 sm:p-8 rounded-3xl flex flex-col justify-between group relative overflow-hidden">
+            <div class="card-watermark absolute right-3 bottom-4 text-[100px] sm:text-[140px]">03</div>
+
+            <div class="relative z-10">
+              <div class="card-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-5 sm:mb-6 transition-transform">
+                <i data-lucide="shield-check" class="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]"></i>
+              </div>
+              <h3 class="card-title font-alpina text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-3 group-hover:text-cyan-300 transition-colors">
+                Troca Segura no Campus
+              </h3>
+              <p class="card-desc text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed font-alpina">
+                Realize o escambo pessoalmente na escola, biblioteca ou laboratório, dando novo ciclo de vida aos itens sem gastar dinheiro.
+              </p>
+            </div>
+            
+            <div class="pt-5 sm:pt-6 mt-6 sm:mt-8 border-t border-white/5 flex items-center justify-between relative z-10">
+              <span class="font-mono text-[11px] sm:text-xs text-cyan-400 font-bold">// CIRCULAÇÃO CONCLUÍDA</span>
+              <a href="#cadastro" data-scroll-to="#cadastro" class="card-arrow-btn p-2 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Fazer parte da comunidade">
+                <i data-lucide="arrow-right" class="w-5 h-5 text-cyan-400 transition-transform"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 5: CINEMATIC JOIN COMMUNITY DECK -->
+    <section id="cadastro" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-6 sm:p-14 md:p-20 overflow-hidden shadow-2xl text-center font-alpina" data-anime-scroll="cta">
+      <div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
+        <div class="font-mono text-xs text-cyan-400 font-bold uppercase tracking-widest mb-3">
+          // ACESSO À COMUNIDADE &bull; ENTRAR
+        </div>
+        <!-- Título & Subtítulo em Gt Alpina Condensed -->
+        <h2 data-beui-split="word" class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 editorial-heading">
+          Faça parte da rede de trocas
+        </h2>
+
+        <p class="font-alpina text-sm sm:text-lg md:text-xl text-slate-300 max-w-lg mb-6 sm:mb-8 leading-relaxed px-2">
+          Cadastre seu e-mail para receber o link de acesso exclusivo e publicar seus primeiros itens para a comunidade.
+        </p>
+
+        <!-- Email Input Form (Gt Alpina Condensed) -->
+        <form id="beta-form" class="flex flex-col sm:flex-row items-center gap-2.5 w-full max-w-md font-alpina" onsubmit="handleBetaSubmit(event)">
+          <label for="beta-email" class="sr-only">Seu e-mail institucional</label>
+          <input 
+            type="email" 
+            id="beta-email" 
+            name="email" 
+            autocomplete="email" 
+            placeholder="seu.email@escola.sp.gov.br" 
+            required 
+            class="w-full h-12 min-h-[48px] px-5 rounded-full bg-[#07080E] border border-white/12 text-base sm:text-sm font-alpina text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner"
+          >
+          <button 
+            type="submit" 
+            id="beta-submit-btn" 
+            class="w-full sm:w-auto h-12 min-h-[48px] px-8 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-alpina font-bold text-xs sm:text-sm uppercase tracking-wider rounded-full transition-all flex-shrink-0 cursor-pointer active:scale-95 shadow-lg"
+          >
+            ENTRAR
+          </button>
+        </form>
+
+        <div id="form-feedback" class="hidden mt-3 p-3 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-alpina text-xs sm:text-sm text-center" aria-live="polite"></div>
+
+        <!-- Social Proof -->
+        <p class="font-mono text-[11px] sm:text-xs text-slate-500 mt-6">
+          // +500 ESTUDANTES E PROFESSORES CADASTRADOS &bull; 100% CÓDIGO ABERTO
+        </p>
+      </div>
+    </section>
+
+    <!-- MODULAR DARK FOOTER (Gt Alpina Condensed) -->
+    <footer id="sobre" class="bg-[#030408] text-slate-400 pt-14 sm:pt-20 pb-10 sm:pb-14 rounded-t-[2rem] sm:rounded-t-[3.5rem] border-t border-white/[0.08] font-alpina" data-anime-scroll="footer" style="content-visibility: auto; contain-intrinsic-size: 1px 450px; padding-bottom: max(2.5rem, env(safe-area-inset-bottom));">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-10 pb-10 sm:pb-12 border-b border-white/5">
+          
+          <!-- Col 1: Brand & Identity -->
+          <div class="anime-fade-up md:col-span-5 flex flex-col gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-cyan-400">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L15 6L12 10L9 6L12 2Z"/>
+                  <path d="M22 12L18 15L14 12L18 9L22 12Z"/>
+                  <path d="M12 22L9 18L12 14L15 18L12 22Z"/>
+                  <path d="M2 12L6 9L10 12L6 15L2 12Z"/>
+                </svg>
+              </div>
+              <span class="font-brand font-bold text-2xl tracking-tighter text-white">escamb<span class="text-cyan-400">.io</span></span>
+            </div>
+
+            <p class="font-alpina text-sm sm:text-base text-slate-400 leading-relaxed max-w-sm">
+              Plataforma modular e comunitária de trocas colaborativas e economia circular sem moeda fiduciária.
+            </p>
+
+            <div class="font-mono text-xs text-slate-500 space-y-0.5">
+              <p>Escola Técnica Estadual &bull; 3º Ano Técnico em Informática</p>
+              <p>Projeto de Conclusão de Curso &bull; São Paulo - SP</p>
+            </div>
+          </div>
+
+          <!-- Col 2: Módulos -->
+          <div class="anime-fade-up md:col-span-3 font-alpina text-sm sm:text-base">
+            <p class="font-bold text-white uppercase tracking-wider mb-3 sm:mb-4 font-alpina text-base sm:text-lg">Módulos</p>
+            <ul class="space-y-2.5">
+              <li><a href="#catalogo" data-scroll-to="#catalogo" onclick="switchCatalogMode('items')" class="hover:text-cyan-400 transition-colors">Itens &amp; Periféricos</a></li>
+              <li><a href="#catalogo" data-scroll-to="#catalogo" onclick="switchCatalogMode('services')" class="hover:text-cyan-400 transition-colors">Serviços &amp; Monitorias</a></li>
+              <li><a href="#como-funciona" data-scroll-to="#como-funciona" class="hover:text-cyan-400 transition-colors">Fluxo de Escambo</a></li>
+              <li><a href="#manifesto" data-scroll-to="#manifesto" class="hover:text-cyan-400 transition-colors">Manifesto Escamb.io</a></li>
+              <li><a href="Defesa_Identidade_Visual.md" target="_blank" class="hover:text-cyan-400 transition-colors">Defesa Técnica (MD)</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Comunidade & Legal -->
+          <div class="anime-fade-up md:col-span-4 font-alpina text-sm sm:text-base">
+            <p class="font-bold text-white uppercase tracking-wider mb-3 sm:mb-4 font-alpina text-base sm:text-lg">Transparência</p>
+            <ul class="space-y-2.5">
+              <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center gap-2"><i data-lucide="github" class="w-3.5 h-3.5"></i> Repositório GitHub</a></li>
+              <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center gap-2"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Diretrizes de Troca Justa</a></li>
+              <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center gap-2"><i data-lucide="code" class="w-3.5 h-3.5"></i> Licença MIT &bull; Código Aberto</a></li>
+              <li><a href="mailto:contato@escamb.io" class="hover:text-cyan-400 transition-colors flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5"></i> contato@escamb.io</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-500 text-center sm:text-left">
+          <p>&copy; 2026 Escamb.io &bull; Plataforma Aberta de Trocas Comunitárias.</p>
+          <p>Tipografia: Gt Alpina Condensed (Títulos &amp; Manifesto) &bull; Geist Sans (Marca) &bull; Season Sans (Tabelas) &bull; Geist Mono (Header).</p>
+        </div>
+
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scripts: Lenis Ultra Smooth Inertia Scroll + @beui/scroll-to + Anime.js Complete Orchestration -->
+  <script>
+    lucide.createIcons();
+
+    // 1. Initialize Lenis Momentum Ultra-Smooth Camera Scroll
+    let lenis = null;
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && typeof Lenis !== 'undefined') {
+      lenis = new Lenis({
+        duration: 1.4,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 0.85,
+        touchMultiplier: 1.2,
+        lerp: 0.08,
+        infinite: false,
+      });
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+    }
+
+    // 2. @beui/scroll-to Engine (Video Outcrowd Smooth Deck Transitions)
+    function beuiScrollTo(targetSelector, offset = -30, duration = 1.4) {
+      const targetElement = document.querySelector(targetSelector);
+      if (!targetElement) return;
+
+      if (lenis && typeof lenis.scrollTo === 'function') {
+        lenis.scrollTo(targetElement, {
+          offset: offset,
+          duration: duration,
+          easing: (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
+        });
+      } else {
+        const top = targetElement.getBoundingClientRect().top + window.pageYOffset + offset;
+        window.scrollTo({
+          top: top,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    // Attach @beui/scroll-to to all data-scroll-to elements & anchor links
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('[data-scroll-to], a[href^="#"]');
+      if (trigger) {
+        const href = trigger.getAttribute('data-scroll-to') || trigger.getAttribute('href');
+        if (href && href.startsWith('#') && href.length > 1) {
+          const targetEl = document.querySelector(href);
+          if (targetEl) {
+            e.preventDefault();
+            beuiScrollTo(href);
+          }
+        }
+      }
+    });
+
+    // 3. Initialize Skiper58 TextRoll Elements (Geist Mono)
+    function initSkiper58TextRoll() {
+      const rollElements = document.querySelectorAll('.text-roll-unit');
+      
+      rollElements.forEach(el => {
+        const text = el.getAttribute('data-roll') || el.innerText.trim();
+        const letters = Array.from(text);
+        
+        el.innerHTML = letters.map((char, i) => {
+          const displayChar = char === ' ' ? '&nbsp;' : char;
+          const delay = (i * 0.02).toFixed(3);
+          return `
+            <span class="roll-letter" style="transition-delay: ${delay}s">
+              <span class="roll-top" style="transition-delay: ${delay}s">${displayChar}</span>
+              <span class="roll-bot" style="transition-delay: ${delay}s">${displayChar}</span>
+            </span>
+          `;
+        }).join('');
+      });
+    }
+
+    // 4. DOMContentLoaded: Anime.js Timelines & Micro-Interactions
+    window.addEventListener('DOMContentLoaded', () => {
+      initSkiper58TextRoll();
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion) {
+        document.querySelectorAll('.cinematic-deck, .anime-hero-elem, .anime-card-elem').forEach(el => {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+        return;
+      }
+
+      // Nav animation
+      anime({
+        targets: ['.anime-nav-left', '.anime-nav-right'],
+        opacity: [0, 1],
+        translateY: [-15, 0],
+        duration: 700,
+        easing: 'easeOutCubic',
+        delay: anime.stagger(100)
+      });
+
+      // Hero Entrance Timeline with Kinetic Reveal
+      const heroTimeline = anime.timeline({
+        easing: 'easeOutExpo'
+      });
+
+      heroTimeline
+        .add({
+          targets: '.text-roll-unit',
+          opacity: [0, 1],
+          translateY: [35, 0],
+          duration: 800,
+          delay: anime.stagger(60),
+        })
+        .add({
+          targets: '.anime-hero-elem',
+          opacity: [0, 1],
+          translateY: [25, 0],
+          duration: 700,
+          delay: anime.stagger(80),
+          easing: 'easeOutCubic'
+        }, '-=500');
+
+      // Cinematic Deck Intersection Observer (Excludes #manifesto so sticky position works 100%)
+      const deckObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const deck = entry.target;
+            deck.classList.add('is-revealed');
+
+            // Animate card children with cascading slide-in
+            const cardElems = deck.querySelectorAll('.anime-card-elem');
+            if (cardElems.length) {
+              anime({
+                targets: cardElems,
+                opacity: [0, 1],
+                translateY: [45, 0],
+                scale: [0.95, 1],
+                duration: 750,
+                delay: anime.stagger(90, { start: 100 }),
+                easing: 'cubicBezier(0.16, 1, 0.3, 1)'
+              });
+            }
+
+            observer.unobserve(deck);
+          }
+        });
+      }, {
+        threshold: 0.08,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      document.querySelectorAll('.cinematic-deck:not(.is-revealed)').forEach(deck => {
+        deckObserver.observe(deck);
+      });
+
+      // Ultra-Smooth Card Hover Physics powered by Anime.js
+      initCardHoverAnimations();
+
+      // Initialize Text Reveal & Kinetic Typography
+      initBeuiTextReveal();
+    });
+
+    // Dedicated Anime.js Card Hover Physics Engine
+    function initCardHoverAnimations() {
+      const allCards = document.querySelectorAll('.minimal-dark-card, .module-card, .feature-card, .step-card');
+
+      allCards.forEach(card => {
+        const watermark = card.querySelector('.card-watermark');
+        const iconBox = card.querySelector('.card-icon-box');
+        const arrow = card.querySelector('.card-arrow-btn, [data-lucide="arrow-right"]');
+
+        card.addEventListener('mouseenter', () => {
+          anime({
+            targets: card,
+            translateY: -8,
+            scale: 1.015,
+            duration: 320,
+            easing: 'cubicBezier(0.16, 1, 0.3, 1)'
+          });
+
+          if (watermark) {
+            anime({
+              targets: watermark,
+              translateX: 10,
+              scale: 1.08,
+              opacity: [0.08, 0.16],
+              duration: 380,
+              easing: 'easeOutCubic'
+            });
+          }
+
+          if (iconBox) {
+            anime({
+              targets: iconBox,
+              scale: 1.14,
+              rotate: '7deg',
+              duration: 300,
+              easing: 'easeOutBack'
+            });
+          }
+
+          if (arrow) {
+            anime({
+              targets: arrow,
+              translateX: 7,
+              duration: 260,
+              easing: 'easeOutQuad'
+            });
+          }
+        });
+
+        card.addEventListener('mouseleave', () => {
+          anime({
+            targets: card,
+            translateY: 0,
+            scale: 1.0,
+            duration: 350,
+            easing: 'easeOutQuad'
+          });
+
+          if (watermark) {
+            anime({
+              targets: watermark,
+              translateX: 0,
+              scale: 1.0,
+              opacity: 0.08,
+              duration: 350,
+              easing: 'easeOutQuad'
+            });
+          }
+
+          if (iconBox) {
+            anime({
+              targets: iconBox,
+              scale: 1.0,
+              rotate: '0deg',
+              duration: 300,
+              easing: 'easeOutQuad'
+            });
+          }
+
+          if (arrow) {
+            anime({
+              targets: arrow,
+              translateX: 0,
+              duration: 250,
+              easing: 'easeOutQuad'
+            });
+          }
+        });
+      });
+    }
+
+    // Exact Tokenizer and Motion Physics from beui.dev/components/motion/text-animation
+    function toWordGroups(line) {
+      const chunks = line.match(/\S+\s*|\s+/g) ?? [];
+      return chunks.map((chunk) => {
+        const text = chunk.replace(/\s+$/, "");
+        return { text, trailing: chunk.slice(text.length) };
+      });
+    }
+
+    function initBeuiTextReveal() {
+      // 1. Scroll Manifesto Container (Exatamente como na primeira versão)
+      const manifestoContainer = document.querySelector('[data-text-reveal="container"]');
+      const manifestoTarget = document.querySelector('.text-reveal-target');
+      
+      if (manifestoContainer && manifestoTarget) {
+        const rawText = manifestoTarget.innerText.trim();
+        const groups = toWordGroups(rawText);
+        const highlightKeywords = ['Escamb.io,', 'colaborativa,', 'transparente', '100%', 'livre', 'dinheiro', 'real.', 'estudantes', 'professores', 'e', 'de'];
+
+        manifestoTarget.innerHTML = groups.map((g) => {
+          const whole = g.text + g.trailing;
+          const isHighlight = highlightKeywords.includes(g.text);
+          return `<span class="beui-reveal-unit font-alpina inline-block whitespace-pre will-change-transform transition-all duration-200 opacity-20 text-slate-600 mr-1 sm:mr-1.5" data-highlight="${isHighlight}">${whole}</span>`;
+        }).join('');
+
+        const units = manifestoTarget.querySelectorAll('.beui-reveal-unit');
+
+        let isTicking = false;
+        function onManifestoScroll() {
+          if (!isTicking) {
+            requestAnimationFrame(() => {
+              const rect = manifestoContainer.getBoundingClientRect();
+              const winH = window.innerHeight;
+              
+              // Inicia a revelação quando o card entra a 85% da tela
+              // Conclui 100% quando o card alcança 20% do topo
+              const startY = winH * 0.85;
+              const endY = winH * 0.20;
+              const currentProgress = Math.max(0, Math.min(1, (startY - rect.top) / (startY - endY)));
+              const totalUnits = units.length;
+              const activeCount = Math.floor(currentProgress * (totalUnits + 1));
+
+              units.forEach((span, i) => {
+                if (i < activeCount) {
+                  if (span.dataset.highlight === 'true') {
+                    span.className = 'beui-reveal-unit font-alpina inline-block whitespace-pre will-change-transform transition-all duration-200 opacity-100 text-cyan-400 font-bold mr-1 sm:mr-1.5';
+                  } else {
+                    span.className = 'beui-reveal-unit font-alpina inline-block whitespace-pre will-change-transform transition-all duration-200 opacity-100 text-white font-extrabold mr-1 sm:mr-1.5';
+                  }
+                } else {
+                  span.className = 'beui-reveal-unit font-alpina inline-block whitespace-pre will-change-transform transition-all duration-200 opacity-20 text-slate-600 mr-1 sm:mr-1.5';
+                }
+              });
+              isTicking = false;
+            });
+            isTicking = true;
+          }
+        }
+
+        window.addEventListener('scroll', onManifestoScroll, { passive: true });
+        window.addEventListener('resize', onManifestoScroll, { passive: true });
+        if (typeof lenis !== 'undefined' && lenis) {
+          lenis.on('scroll', onManifestoScroll);
+        }
+        onManifestoScroll();
+      }
+
+      // 2. WhileInView Heading Units
+      const inViewObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const rawText = el.innerText.trim();
+            const groups = toWordGroups(rawText);
+            el.innerHTML = groups.map(g => {
+              const whole = g.text + g.trailing;
+              return `<span class="beui-word inline-block whitespace-pre will-change-transform opacity-0" style="transform: translateY(35px);">${whole}</span>`;
+            }).join('');
+
+            if (typeof anime !== 'undefined') {
+              anime({
+                targets: el.querySelectorAll('.beui-word'),
+                opacity: [0, 1],
+                translateY: ['35px', '0px'],
+                delay: anime.stagger(60),
+                duration: 800,
+                easing: 'cubicBezier(0.16, 1, 0.3, 1)'
+              });
+            }
+
+            obs.unobserve(el);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      document.querySelectorAll('[data-beui-split]').forEach(el => {
+        inViewObserver.observe(el);
+      });
+    }
+
+    // Segmented Mode Switcher [ITENS | SERVIÇOS]
+    function switchCatalogMode(mode) {
+      const btnItems = document.getElementById('tab-btn-items');
+      const btnServices = document.getElementById('tab-btn-services');
+      const btnItemsMobile = document.getElementById('tab-btn-items-mobile');
+      const btnServicesMobile = document.getElementById('tab-btn-services-mobile');
+      const modeTitle = document.getElementById('catalog-mode-title');
+      const countLabel = document.getElementById('active-item-count');
+      const itemCards = document.querySelectorAll('.item-card');
+      const serviceCards = document.querySelectorAll('.service-card');
+
+      const activeClasses = 'px-3.5 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm transition-all focus:outline-none font-alpina';
+      const inactiveClasses = 'px-3.5 py-1.5 rounded-full text-slate-400 hover:text-white transition-all focus:outline-none font-alpina';
+
+      if (mode === 'items') {
+        if (btnItems) {
+          btnItems.className = activeClasses;
+          btnItems.setAttribute('aria-pressed', 'true');
+        }
+        if (btnItemsMobile) {
+          btnItemsMobile.className = activeClasses;
+          btnItemsMobile.setAttribute('aria-pressed', 'true');
+        }
+        if (btnServices) {
+          btnServices.className = inactiveClasses;
+          btnServices.setAttribute('aria-pressed', 'false');
+        }
+        if (btnServicesMobile) {
+          btnServicesMobile.className = inactiveClasses;
+          btnServicesMobile.setAttribute('aria-pressed', 'false');
+        }
+        
+        if (modeTitle) modeTitle.textContent = 'ITENS DISPONÍVEIS PARA TROCA';
+        if (countLabel) countLabel.textContent = '4 MÓDULOS DE ITENS';
+
+        itemCards.forEach(c => c.classList.remove('hidden'));
+        serviceCards.forEach(c => c.classList.add('hidden'));
+
+        if (typeof anime !== 'undefined') {
+          anime({
+            targets: itemCards,
+            opacity: [0, 1],
+            translateY: [25, 0],
+            scale: [0.96, 1],
+            duration: 450,
+            delay: anime.stagger(80),
+            easing: 'easeOutQuad'
+          });
+        }
+      } else {
+        if (btnServices) {
+          btnServices.className = activeClasses;
+          btnServices.setAttribute('aria-pressed', 'true');
+        }
+        if (btnServicesMobile) {
+          btnServicesMobile.className = activeClasses;
+          btnServicesMobile.setAttribute('aria-pressed', 'true');
+        }
+        if (btnItems) {
+          btnItems.className = inactiveClasses;
+          btnItems.setAttribute('aria-pressed', 'false');
+        }
+        if (btnItemsMobile) {
+          btnItemsMobile.className = inactiveClasses;
+          btnItemsMobile.setAttribute('aria-pressed', 'false');
+        }
+
+        if (modeTitle) modeTitle.textContent = 'SERVIÇOS & MONITORIAS DISPONÍVEIS';
+        if (countLabel) countLabel.textContent = '2 MÓDULOS DE SERVIÇOS';
+
+        itemCards.forEach(c => c.classList.add('hidden'));
+        serviceCards.forEach(c => c.classList.remove('hidden'));
+
+        if (typeof anime !== 'undefined') {
+          anime({
+            targets: serviceCards,
+            opacity: [0, 1],
+            translateY: [25, 0],
+            scale: [0.96, 1],
+            duration: 450,
+            delay: anime.stagger(80),
+            easing: 'easeOutQuad'
+          });
+        }
+      }
+    }
+
+    // Autocomplete Dataset
+    const communityPeers = [
+      { id: "1", name: "Lucas Mendes", item: "Lenovo ThinkPad X280 (8GB/256GB)", tag: "3º Ano Info", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80", query: "thinkpad" },
+      { id: "2", name: "Beatriz Costa", item: "Coleção Algoritmos & Clean Code", tag: "2º Ano Info", avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80", query: "livros" },
+      { id: "3", name: "Guilherme Rocha", item: "Teclado Mecânico Akko 3068B", tag: "Automação", avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=120&auto=format&fit=crop&q=80", query: "teclado" },
+      { id: "4", name: "Rafael Oliveira", item: "Mentoria React & Front-end Moderno", tag: "Monitor Web", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80", query: "react" },
+      { id: "5", name: "Camila Nogueira", item: "UI/UX Design System no Figma", tag: "Design Gráfico", avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&auto=format&fit=crop&q=80", query: "figma" },
+      { id: "6", name: "Matheus Lima", item: "Calculadora Casio FX-991LAX", tag: "Eng. Elétrica", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80", query: "calculadora" }
+    ];
+
+    function showAutocompletePopup() {
+      const popup = document.getElementById('search-autocomplete-popup');
+      const input = document.getElementById('quick-search-input');
+      if (popup) {
+        popup.classList.remove('hidden');
+        renderAutocompleteResults(input ? input.value : '');
+      }
+    }
+
+    function hideAutocompletePopup() {
+      const popup = document.getElementById('search-autocomplete-popup');
+      if (popup) popup.classList.add('hidden');
+    }
+
+    function renderAutocompleteResults(query) {
+      const q = (query || '').toLowerCase().trim();
+      const list = document.getElementById('autocomplete-list');
+      const count = document.getElementById('autocomplete-count');
+      if (!list) return;
+
+      const matches = communityPeers.filter(p => 
+        !q || 
+        p.name.toLowerCase().includes(q) || 
+        p.item.toLowerCase().includes(q) || 
+        p.tag.toLowerCase().includes(q) || 
+        p.query.includes(q)
+      );
+
+      if (count) {
+        count.textContent = `${matches.length} MÓDULOS`;
+      }
+
+      if (matches.length === 0) {
+        list.innerHTML = `
+          <div class="py-4 text-center text-slate-500 font-alpina text-sm">
+            Nenhum participante ou módulo para "${query}"
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = matches.map(m => `
+        <div 
+          onclick="selectAutocompleteItem('${m.query}')" 
+          class="flex items-center justify-between p-2 rounded-xl hover:bg-white/10 cursor-pointer transition-colors group/item"
+        >
+          <div class="flex items-center gap-3 min-w-0">
+            <img src="${m.avatar}" alt="${m.name}" class="w-8 h-8 rounded-full object-cover border border-white/10 flex-shrink-0" />
+            <div class="min-w-0">
+              <span class="font-bold text-white block text-sm truncate group-hover/item:text-cyan-300 font-alpina">${m.name}</span>
+              <span class="text-slate-400 text-xs block truncate font-alpina">${m.item} &bull; <strong class="text-cyan-400 font-normal font-mono">${m.tag}</strong></span>
+            </div>
+          </div>
+          <span class="text-xs font-alpina text-slate-500 group-hover/item:text-white transition-colors uppercase pl-2">
+            Ver &rarr;
+          </span>
+        </div>
+      `).join('');
+    }
+
+    function selectAutocompleteItem(query) {
+      const input = document.getElementById('quick-search-input');
+      if (input) {
+        input.value = query;
+        handleQuickFilter(query);
+      }
+      hideAutocompletePopup();
+      beuiScrollTo('#catalogo');
+    }
+
+    // Quick Search Filter in Hero with Polish & Anime.js Interactions
+    function handleQuickFilter(query) {
+      const q = query.toLowerCase().trim();
+      const allCards = document.querySelectorAll('.module-card');
+      const noResults = document.getElementById('no-results-state');
+      let visibleCount = 0;
+
+      renderAutocompleteResults(query);
+
+      const searchIcon = document.getElementById('search-icon-anim');
+      const searchKbd = document.getElementById('search-kbd-shortcut');
+      if (searchIcon && typeof anime !== 'undefined') {
+        anime({
+          targets: searchIcon,
+          scale: [1, 1.25, 1],
+          duration: 220,
+          easing: 'easeOutQuad'
+        });
+      }
+      if (searchKbd && typeof anime !== 'undefined') {
+        anime({
+          targets: searchKbd,
+          scale: [1, 1.15, 1],
+          duration: 200,
+          easing: 'easeOutQuad'
+        });
+      }
+
+      allCards.forEach(card => {
+        const text = card.textContent.toLowerCase() + ' ' + (card.dataset.tags || '');
+        if (!q || text.includes(q)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (noResults) {
+        if (visibleCount === 0) {
+          noResults.classList.remove('hidden');
+        } else {
+          noResults.classList.add('hidden');
+        }
+      }
+
+      const countLabel = document.getElementById('active-item-count');
+      if (countLabel) {
+        countLabel.textContent = `${visibleCount} MÓDULOS ENCONTRADOS`;
+      }
+    }
+
+    // Search Bar Hover Animation, Click Outside & Global '/' Shortcut
+    (function initSearchInteractions() {
+      const searchGroup = document.getElementById('search-input-group');
+      const searchInput = document.getElementById('quick-search-input');
+      const searchIcon = document.getElementById('search-icon-anim');
+      const popup = document.getElementById('search-autocomplete-popup');
+
+      if (searchGroup && typeof anime !== 'undefined') {
+        searchGroup.addEventListener('mouseenter', () => {
+          anime({
+            targets: searchGroup,
+            scale: [1, 1.012],
+            duration: 250,
+            easing: 'easeOutQuad'
+          });
+          if (searchIcon) {
+            anime({
+              targets: searchIcon,
+              rotate: [0, -10, 10, 0],
+              duration: 400,
+              easing: 'easeInOutSine'
+            });
+          }
+        });
+
+        searchGroup.addEventListener('mouseleave', () => {
+          anime({
+            targets: searchGroup,
+            scale: 1,
+            duration: 300,
+            easing: 'easeOutQuad'
+          });
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        if (searchGroup && popup && !searchGroup.contains(e.target) && !popup.contains(e.target)) {
+          hideAutocompletePopup();
+        }
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          hideAutocompletePopup();
+          searchInput?.blur();
+        }
+
+        if (
+          e.key === '/' &&
+          document.activeElement !== searchInput &&
+          !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)
+        ) {
+          e.preventDefault();
+          if (searchInput) {
+            searchInput.focus();
+            showAutocompletePopup();
+            const searchKbd = document.getElementById('search-kbd-shortcut');
+            if (searchKbd && typeof anime !== 'undefined') {
+              anime({
+                targets: searchKbd,
+                scale: [1, 1.3, 1],
+                duration: 250,
+                easing: 'easeOutBack'
+              });
+            }
+          }
+        }
+      });
+    })();
+
+    // Beta Signup Form Handler
+    function handleBetaSubmit(event) {
+      event.preventDefault();
+      const input = document.getElementById('beta-email');
+      const btn = document.getElementById('beta-submit-btn');
+      const feedback = document.getElementById('form-feedback');
+      
+      if (!input.value) return;
+
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      setTimeout(() => {
+        feedback.textContent = '✨ Módulo ativado! Seu e-mail foi cadastrado com sucesso para o acesso piloto.';
+        feedback.classList.remove('hidden');
+        input.value = '';
+        btn.disabled = false;
+        btn.textContent = 'ENTRAR';
+      }, 400);
+    }
+
+    // 7. Sharp, Highly-Visible Topological Vector Contour Shader (Zero Blur, Zero Mud, Matte Black Aesthetic)
+    (function initHeroShader() {
+      const canvas = document.getElementById('shader-bg-canvas');
+      if (!canvas) return;
+      const gl = canvas.getContext('webgl', { antialias: true, alpha: false });
+      if (!gl) return;
+
+      // Enable standard derivative extension if available for razor-sharp vector line antialiasing
+      gl.getExtension('OES_standard_derivatives');
+
+      const VERT = `
+        attribute vec2 a_position;
+        void main() {
+          gl_Position = vec4(a_position, 0.0, 1.0);
+        }
+      `;
+
+      const FRAG = `
+        #ifdef GL_ES
+        precision highp float;
+        #endif
+
+        #extension GL_OES_standard_derivatives : enable
+
+        uniform vec2 u_resolution;
+        uniform float u_time;
+        uniform vec2 u_mouse;
+
+        float hash21(vec2 p) {
+          p = fract(p * vec2(234.34, 435.345));
+          p += dot(p, p + 34.23);
+          return fract(p.x * p.y);
+        }
+
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          vec2 u = f * f * (3.0 - 2.0 * f);
+          return mix(mix(hash21(i), hash21(i + vec2(1.0, 0.0)), u.x), mix(hash21(i + vec2(0.0, 1.0)), hash21(i + vec2(1.0, 1.0)), u.x), u.y);
+        }
+
+        float fbm(vec2 p) {
+          float v = 0.0;
+          float a = 0.5;
+          for (int i = 0; i < 4; i++) {
+            v += a * noise(p);
+            p = p * 2.08 + vec2(13.1, 7.7);
+            a *= 0.5;
+          }
+          return v;
+        }
+
+        void main() {
+          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+          vec2 p = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+
+          // Subtle cursor tracking
+          p += u_mouse * 0.08;
+
+          float t = u_time * 0.06;
+
+          // Multi-layer topological field
+          float n1 = fbm(p * 1.6 + vec2(t * 0.25, t * 0.15));
+          float n2 = fbm(p * 2.2 - vec2(t * 0.18, -t * 0.22) + n1 * 0.7);
+
+          // Sharp vector contour isolines (Clean, visible, zero muddy blur)
+          float density = 16.0;
+          float val = n2 * density;
+          float dist = abs(fract(val - 0.5) - 0.5);
+
+          #ifdef GL_OES_standard_derivatives
+          float f = fwidth(val);
+          float line = 1.0 - clamp(dist / max(f, 0.001) - 0.5, 0.0, 1.0);
+          #else
+          float line = smoothstep(0.08, 0.0, dist);
+          #endif
+
+          // Secondary harmonic contour
+          float val2 = n1 * 10.0;
+          float dist2 = abs(fract(val2 - 0.5) - 0.5);
+          float line2 = smoothstep(0.06, 0.0, dist2);
+
+          // Deep Matte Void Base Color (#030407)
+          vec3 bg = vec3(0.015, 0.020, 0.028);
+
+          // Crisp, Visible Accent Lines (Electric Cyan #22D3EE and Slate Cobalt #3B82F6)
+          vec3 cyanCol = vec3(0.133, 0.827, 0.933);
+          vec3 blueCol = vec3(0.231, 0.510, 0.965);
+
+          // Composite sharp lines without fuzzy blur or glare
+          vec3 col = bg;
+          col = mix(col, blueCol, line2 * 0.22);
+          col = mix(col, cyanCol, line * 0.38);
+
+          // Subtle depth gradient
+          float vig = 1.0 - dot(p * 0.55, p * 0.55);
+          col *= clamp(vig, 0.35, 1.0);
+
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `;
+
+      const compile = (type, src) => {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        return s;
+      };
+
+      const program = gl.createProgram();
+      gl.attachShader(program, compile(gl.VERTEX_SHADER, VERT));
+      gl.attachShader(program, compile(gl.FRAGMENT_SHADER, FRAG));
+      gl.linkProgram(program);
+      gl.useProgram(program);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(program, 'a_position');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+      const uni = {
+        resolution: gl.getUniformLocation(program, 'u_resolution'),
+        time: gl.getUniformLocation(program, 'u_time'),
+        mouse: gl.getUniformLocation(program, 'u_mouse')
+      };
+
+      let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+      const start = performance.now();
+
+      function resize() {
+        const isMobile = window.innerWidth < 768;
+        const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.75);
+        const w = Math.floor(canvas.clientWidth * dpr);
+        const h = Math.floor(canvas.clientHeight * dpr);
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+          gl.viewport(0, 0, w, h);
+        }
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      window.addEventListener('pointermove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          targetX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+          targetY = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+        }
+      }, { passive: true });
+
+      function render(now) {
+        mouseX += (targetX - mouseX) * 0.05;
+        mouseY += (targetY - mouseY) * 0.05;
+        resize();
+        
+        gl.uniform2f(uni.resolution, canvas.width, canvas.height);
+        gl.uniform1f(uni.time, (now - start) / 1000);
+        gl.uniform2f(uni.mouse, mouseX, mouseY);
+        
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        requestAnimationFrame(render);
+      }
+      requestAnimationFrame(render);
+    })();
+  </script>
+</body>
+</html>
