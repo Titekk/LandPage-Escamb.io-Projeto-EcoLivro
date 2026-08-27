@@ -68,6 +68,10 @@
   <!-- Lenis Smooth Inertia Scroll -->
   <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
 
+  <!-- GSAP 3.12.5 & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
   <!-- Anime.js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 
@@ -275,13 +279,40 @@
       will-change: transform, opacity;
     }
 
-    /* Manifesto Kinetic Word Reveal Units */
-    .beui-reveal-unit {
+    /* Manifesto Kinetic Word Reveal Units & Text Highlight Engine */
+    .beui-reveal-unit,
+    .manifesto-word {
       display: inline-block;
       white-space: pre;
-      will-change: opacity, color;
-      transition: opacity 0.18s ease-out, color 0.18s ease-out;
+      will-change: opacity, transform, color, filter, text-shadow;
+      transition: color 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+                  opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+                  text-shadow 0.38s ease;
+      color: rgba(255, 255, 255, 0.16);
+      opacity: 0.25;
       margin-right: 0.16em;
+      vertical-align: baseline;
+      transform: translateY(2px);
+    }
+
+    .manifesto-word.is-revealed,
+    .beui-reveal-unit.is-revealed {
+      color: #FFFFFF;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .manifesto-word.is-revealed.is-accent,
+    .beui-reveal-unit.is-revealed.is-accent {
+      color: #22D3EE;
+      font-weight: 900;
+      text-shadow: 0 0 22px rgba(34, 211, 238, 0.65), 0 0 45px rgba(34, 211, 238, 0.25);
+    }
+
+    .manifesto-word.is-active-focus {
+      transform: scale(1.05) translateY(-2px);
+      filter: brightness(1.3);
     }
 
     /* Skiper58 TextRoll Kinetic Character Roll CSS Engine (Geist Mono) */
@@ -1244,25 +1275,46 @@
   <!-- ========================================================================= -->
   <div id="bloco-manifesto-fechamento" class="modular-deck-section w-full space-y-6 sm:space-y-10 py-6 sm:py-8">
 
-    <!-- SCENE 3: CINEMATIC TEXT REVEAL MANIFESTO DECK (Deep Void & Electric Cyan) -->
-    <section id="manifesto" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] bg-[#070912] border border-white/[0.08] shadow-2xl p-6 sm:p-14 md:p-20 flex flex-col justify-center items-center text-center overflow-hidden font-alpina min-h-[60vh] sm:min-h-[72vh]" data-text-reveal="container">
+    <!-- SCENE 3: CINEMATIC TEXT REVEAL MANIFESTO DECK (Deep Void, GSAP ScrollTrigger, Anime.js & Lenis) -->
+    <section id="manifesto" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] bg-[#070912] border border-white/[0.08] shadow-2xl p-6 sm:p-14 md:p-20 flex flex-col justify-center items-center text-center overflow-hidden font-alpina min-h-[65vh] sm:min-h-[78vh] relative" data-text-reveal="container">
       
-      <!-- Section Tag -->
-      <div class="font-mono text-xs text-cyan-400 font-bold uppercase tracking-widest mb-6 sm:mb-8 flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-        // MANIFESTO DE ECONOMIA CIRCULAR
+      <!-- Ambient Reactive Background Glow Orb -->
+      <div id="manifesto-ambient-glow" class="absolute inset-0 pointer-events-none opacity-20 -z-10 flex items-center justify-center transition-opacity duration-700">
+        <div class="w-[300px] sm:w-[580px] h-[300px] sm:h-[580px] rounded-full bg-cyan-500/20 blur-[110px] transform-gpu"></div>
       </div>
 
-      <!-- Editorial Large Manifesto Copy -->
-      <div class="max-w-4xl mx-auto my-auto py-2 sm:py-4">
-        <p class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.28] sm:leading-[1.2] tracking-tight text-reveal-target editorial-large-copy px-2">
+      <!-- Subtle Tech Grid -->
+      <div class="absolute inset-0 crisp-tech-grid opacity-25 pointer-events-none -z-20"></div>
+
+      <!-- Section Tag & Reading Progress Pill -->
+      <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-4xl mb-6 sm:mb-8 px-2 gap-3">
+        <div class="font-mono text-xs text-cyan-400 font-bold uppercase tracking-widest flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          // MANIFESTO DE ECONOMIA CIRCULAR
+        </div>
+
+        <div id="manifesto-progress-badge" class="font-mono text-[11px] sm:text-xs text-slate-400 bg-white/[0.04] border border-white/10 px-3.5 py-1 rounded-full flex items-center gap-2 shadow-sm">
+          <span>PROGRESSO:</span>
+          <span class="text-cyan-400 font-bold font-mono" id="manifesto-progress-percent">0%</span>
+        </div>
+      </div>
+
+      <!-- Top Reading Progress Track -->
+      <div class="w-full max-w-4xl h-1.5 bg-white/[0.06] rounded-full overflow-hidden mb-6 sm:mb-10 border border-white/5">
+        <div id="manifesto-progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-300 w-0 transition-all duration-100 rounded-full shadow-[0_0_14px_rgba(34,211,238,0.7)]"></div>
+      </div>
+
+      <!-- Editorial Large Manifesto Copy with Scrolled Text Highlight -->
+      <div class="max-w-4xl mx-auto my-auto py-2 sm:py-6">
+        <p id="manifesto-text" class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.32] sm:leading-[1.22] tracking-tight text-reveal-target editorial-large-copy px-2 select-none">
           No Escamb.io, acreditamos que nenhum livro didático, periférico ou conhecimento acadêmico deve ficar esquecido na gaveta. Conectamos estudantes e professores para transformar o que você já tem no que você realmente precisa — de forma colaborativa, transparente e 100% livre de dinheiro real.
         </p>
       </div>
 
-      <div class="mt-6 sm:mt-8 font-mono text-xs text-slate-400 flex items-center gap-2">
-        <i data-lucide="arrow-down" class="w-4 h-4 animate-smooth-float text-cyan-400"></i>
-        <span>DESLIZE PARA REVELAR O MANIFESTO</span>
+      <!-- Scroll Action Hint with Anime.js icon bounce -->
+      <div class="mt-6 sm:mt-10 font-mono text-xs text-slate-400 flex items-center gap-2">
+        <i data-lucide="arrow-down" class="w-4 h-4 animate-smooth-float text-cyan-400" id="manifesto-arrow-cue"></i>
+        <span id="manifesto-cue-text">DESLIZE PARA REVELAR O MANIFESTO</span>
       </div>
 
     </section>
@@ -1477,7 +1529,7 @@
   <script>
     lucide.createIcons();
 
-    // 1. Initialize Lenis Momentum Ultra-Smooth Camera Scroll
+    // 1. Initialize Lenis Momentum Ultra-Smooth Camera Scroll & GSAP Sync
     let lenis = null;
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && typeof Lenis !== 'undefined') {
       lenis = new Lenis({
@@ -1492,11 +1544,20 @@
         infinite: false,
       });
 
-      function raf(time) {
-        lenis.raf(time);
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+      } else {
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
         requestAnimationFrame(raf);
       }
-      requestAnimationFrame(raf);
     }
 
     // 2. @beui/scroll-to Engine (Video Outcrowd Smooth Deck Transitions)
@@ -1741,62 +1802,126 @@
       });
     }
 
+    // Multi-Library Text Highlight on Scroll Engine (GSAP 3 + ScrollTrigger + Anime.js + Lenis)
     function initBeuiTextReveal() {
-      // 1. Scroll Manifesto Container (Exatamente como na primeira versão)
+      // 1. Scroll Manifesto Highlight Container
       const manifestoContainer = document.querySelector('[data-text-reveal="container"]');
       const manifestoTarget = document.querySelector('.text-reveal-target');
+      const progressBar = document.getElementById('manifesto-progress-bar');
+      const progressPercent = document.getElementById('manifesto-progress-percent');
+      const ambientGlow = document.getElementById('manifesto-ambient-glow');
+      const cueText = document.getElementById('manifesto-cue-text');
+      const arrowCue = document.getElementById('manifesto-arrow-cue');
       
       if (manifestoContainer && manifestoTarget) {
         const rawText = manifestoTarget.innerText.trim();
         const groups = toWordGroups(rawText);
-        const highlightKeywords = ['Escamb.io,', 'colaborativa,', 'transparente', '100%', 'livre', 'dinheiro', 'real.', 'estudantes', 'professores', 'e', 'de'];
+        const highlightKeywords = [
+          'escamb.io', 'nenhum', 'livro', 'didático', 'periférico', 'conhecimento', 
+          'acadêmico', 'estudantes', 'professores', 'transformar', 'colaborativa', 
+          'transparente', '100%', 'livre', 'dinheiro', 'real'
+        ];
 
         manifestoTarget.innerHTML = groups.map((g) => {
           const whole = g.text + g.trailing;
-          const isHighlight = highlightKeywords.includes(g.text);
-          return `<span class="beui-reveal-unit font-alpina inline-block whitespace-pre will-change-transform transition-all duration-200 opacity-20 text-slate-600 mr-1 sm:mr-1.5" data-highlight="${isHighlight}">${whole}</span>`;
+          const clean = g.text.toLowerCase().replace(/[^\wÀ-ÿ%]/g, '');
+          const isAccent = highlightKeywords.some(kw => clean === kw || clean.includes(kw));
+          return `<span class="manifesto-word beui-reveal-unit font-alpina ${isAccent ? 'is-accent' : ''}" data-accent="${isAccent}">${whole}</span>`;
         }).join('');
 
-        const units = manifestoTarget.querySelectorAll('.beui-reveal-unit');
+        const units = manifestoTarget.querySelectorAll('.manifesto-word');
+        const totalUnits = units.length;
+        let isCelebrated = false;
 
-        let isTicking = false;
-        function onManifestoScroll() {
-          if (!isTicking) {
-            requestAnimationFrame(() => {
-              const rect = manifestoContainer.getBoundingClientRect();
-              const winH = window.innerHeight;
-              
-              // Inicia a revelação quando o card entra a 85% da tela
-              // Conclui 100% quando o card alcança 20% do topo
-              const startY = winH * 0.85;
-              const endY = winH * 0.20;
-              const currentProgress = Math.max(0, Math.min(1, (startY - rect.top) / (startY - endY)));
-              const totalUnits = units.length;
-              const activeCount = Math.floor(currentProgress * (totalUnits + 1));
+        function updateProgress(progress) {
+          const currentProgress = Math.max(0, Math.min(1, progress));
+          const activeCount = Math.floor(currentProgress * (totalUnits + 1));
+          const pct = Math.round(currentProgress * 100);
 
-              units.forEach((span, i) => {
-                if (i < activeCount) {
-                  if (span.dataset.highlight === 'true') {
-                    span.className = 'beui-reveal-unit font-alpina inline-block whitespace-pre will-change-transform transition-all duration-200 opacity-100 text-cyan-400 font-bold mr-1 sm:mr-1.5';
-                  } else {
-                    span.className = 'beui-reveal-unit font-alpina inline-block whitespace-pre will-change-transform transition-all duration-200 opacity-100 text-white font-extrabold mr-1 sm:mr-1.5';
-                  }
-                } else {
-                  span.className = 'beui-reveal-unit font-alpina inline-block whitespace-pre will-change-transform transition-all duration-200 opacity-20 text-slate-600 mr-1 sm:mr-1.5';
-                }
+          units.forEach((span, i) => {
+            if (i < activeCount) {
+              span.classList.add('is-revealed');
+              if (i === activeCount - 1 && currentProgress < 1) {
+                span.classList.add('is-active-focus');
+              } else {
+                span.classList.remove('is-active-focus');
+              }
+            } else {
+              span.classList.remove('is-revealed', 'is-active-focus');
+            }
+          });
+
+          if (progressBar) {
+            progressBar.style.width = `${pct}%`;
+          }
+          if (progressPercent) {
+            progressPercent.textContent = `${pct}%`;
+          }
+
+          if (ambientGlow) {
+            ambientGlow.style.opacity = (0.2 + currentProgress * 0.65).toFixed(2);
+          }
+
+          if (pct >= 100) {
+            if (cueText) cueText.innerHTML = '<span class="text-cyan-400 font-bold">MANIFESTO 100% CONCLUÍDO &bull; CIRCULAÇÃO ATIVA</span>';
+            if (arrowCue) arrowCue.style.display = 'none';
+
+            if (!isCelebrated && typeof anime !== 'undefined') {
+              isCelebrated = true;
+              anime({
+                targets: manifestoContainer,
+                borderColor: ['rgba(255,255,255,0.08)', 'rgba(34,211,238,0.7)', 'rgba(255,255,255,0.08)'],
+                boxShadow: [
+                  '0 0 0px rgba(34,211,238,0)',
+                  '0 0 45px rgba(34,211,238,0.3)',
+                  '0 0 20px rgba(34,211,238,0.08)'
+                ],
+                duration: 1200,
+                easing: 'easeOutExpo'
               });
-              isTicking = false;
-            });
-            isTicking = true;
+            }
+          } else {
+            if (isCelebrated && pct < 85) isCelebrated = false;
+            if (cueText) cueText.textContent = 'DESLIZE PARA REVELAR O MANIFESTO';
+            if (arrowCue) arrowCue.style.display = 'inline-block';
           }
         }
 
-        window.addEventListener('scroll', onManifestoScroll, { passive: true });
-        window.addEventListener('resize', onManifestoScroll, { passive: true });
-        if (typeof lenis !== 'undefined' && lenis) {
-          lenis.on('scroll', onManifestoScroll);
+        // Use GSAP ScrollTrigger if available, otherwise optimized Lenis/rAF fallback
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+          ScrollTrigger.create({
+            trigger: manifestoContainer,
+            start: 'top 78%',
+            end: 'bottom 25%',
+            scrub: true,
+            onUpdate: (self) => {
+              updateProgress(self.progress);
+            }
+          });
+        } else {
+          let isTicking = false;
+          function onManifestoScroll() {
+            if (!isTicking) {
+              requestAnimationFrame(() => {
+                const rect = manifestoContainer.getBoundingClientRect();
+                const winH = window.innerHeight;
+                const startY = winH * 0.82;
+                const endY = winH * 0.22;
+                const currentProgress = (startY - rect.top) / (startY - endY);
+                updateProgress(currentProgress);
+                isTicking = false;
+              });
+              isTicking = true;
+            }
+          }
+
+          window.addEventListener('scroll', onManifestoScroll, { passive: true });
+          window.addEventListener('resize', onManifestoScroll, { passive: true });
+          if (typeof lenis !== 'undefined' && lenis) {
+            lenis.on('scroll', onManifestoScroll);
+          }
+          onManifestoScroll();
         }
-        onManifestoScroll();
       }
 
       // 2. WhileInView Heading Units
@@ -2250,6 +2375,7 @@
         gl.compileShader(s);
         return s;
       };
+      
 
       const program = gl.createProgram();
       gl.attachShader(program, compile(gl.VERTEX_SHADER, VERT));
