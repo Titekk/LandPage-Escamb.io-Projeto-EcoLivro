@@ -1303,49 +1303,51 @@
   <!-- ========================================================================= -->
   <div id="bloco-manifesto-fechamento" class="modular-deck-section w-full space-y-6 sm:space-y-10 py-6 sm:py-8">
 
-    <!-- SCENE 3: CINEMATIC TEXT REVEAL MANIFESTO DECK (Deep Void, GSAP ScrollTrigger, Anime.js & Lenis) -->
-    <section id="manifesto" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] bg-[#070912] border border-white/[0.08] shadow-2xl p-6 sm:p-14 md:p-20 flex flex-col justify-center items-center text-center overflow-hidden font-alpina min-h-[65vh] sm:min-h-[78vh] relative" data-text-reveal="container">
-      
-      <!-- Ambient Reactive Background Glow Orb -->
-      <div id="manifesto-ambient-glow" class="absolute inset-0 pointer-events-none opacity-20 -z-10 flex items-center justify-center transition-opacity duration-700">
-        <div class="w-[300px] sm:w-[580px] h-[300px] sm:h-[580px] rounded-full bg-cyan-500/20 blur-[110px] transform-gpu"></div>
-      </div>
-
-      <!-- Subtle Tech Grid -->
-      <div class="absolute inset-0 crisp-tech-grid opacity-25 pointer-events-none -z-20"></div>
-
-      <!-- Section Tag & Reading Progress Pill -->
-      <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-4xl mb-6 sm:mb-8 px-2 gap-3">
-        <div class="font-mono text-xs text-cyan-400 font-bold uppercase tracking-widest flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-          // MANIFESTO DE ECONOMIA CIRCULAR
+    <!-- SCENE 3: PINNED CINEMATIC TEXT REVEAL MANIFESTO DECK (GSAP ScrollTrigger Pinning, Anime.js & Lenis) -->
+    <div id="manifesto-pin-wrapper" class="w-full relative min-h-screen flex items-center justify-center py-2 sm:py-6">
+      <section id="manifesto" class="cinematic-deck is-revealed relative w-full mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] bg-[#070912] border border-white/[0.08] shadow-2xl p-6 sm:p-14 md:p-20 flex flex-col justify-center items-center text-center overflow-hidden font-alpina min-h-[75vh] sm:min-h-[82vh]" data-text-reveal="container">
+        
+        <!-- Ambient Reactive Background Glow Orb -->
+        <div id="manifesto-ambient-glow" class="absolute inset-0 pointer-events-none opacity-20 -z-10 flex items-center justify-center transition-opacity duration-700">
+          <div class="w-[300px] sm:w-[580px] h-[300px] sm:h-[580px] rounded-full bg-cyan-500/20 blur-[110px] transform-gpu"></div>
         </div>
 
-        <div id="manifesto-progress-badge" class="font-mono text-[11px] sm:text-xs text-slate-400 bg-white/[0.04] border border-white/10 px-3.5 py-1 rounded-full flex items-center gap-2 shadow-sm">
-          <span>PROGRESSO:</span>
-          <span class="text-cyan-400 font-bold font-mono" id="manifesto-progress-percent">0%</span>
+        <!-- Subtle Tech Grid -->
+        <div class="absolute inset-0 crisp-tech-grid opacity-25 pointer-events-none -z-20"></div>
+
+        <!-- Section Tag & Reading Progress Pill -->
+        <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-4xl mb-6 sm:mb-8 px-2 gap-3">
+          <div class="font-mono text-xs text-cyan-400 font-bold uppercase tracking-widest flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            // MANIFESTO DE ECONOMIA CIRCULAR
+          </div>
+
+          <div id="manifesto-progress-badge" class="font-mono text-[11px] sm:text-xs text-slate-400 bg-white/[0.04] border border-white/10 px-3.5 py-1 rounded-full flex items-center gap-2 shadow-sm">
+            <span>PROGRESSO:</span>
+            <span class="text-cyan-400 font-bold font-mono" id="manifesto-progress-percent">0% LIDO</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Top Reading Progress Track -->
-      <div class="w-full max-w-4xl h-1.5 bg-white/[0.06] rounded-full overflow-hidden mb-6 sm:mb-10 border border-white/5">
-        <div id="manifesto-progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-300 w-0 transition-all duration-100 rounded-full shadow-[0_0_14px_rgba(34,211,238,0.7)]"></div>
-      </div>
+        <!-- Top Reading Progress Track -->
+        <div class="w-full max-w-4xl h-2 bg-white/[0.06] rounded-full overflow-hidden mb-6 sm:mb-10 border border-white/5">
+          <div id="manifesto-progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-300 w-0 transition-all duration-75 rounded-full shadow-[0_0_16px_rgba(34,211,238,0.8)]"></div>
+        </div>
 
-      <!-- Editorial Large Manifesto Copy with Scrolled Text Highlight -->
-      <div class="max-w-4xl mx-auto my-auto py-2 sm:py-6">
-        <p id="manifesto-text" class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.32] sm:leading-[1.22] tracking-tight text-reveal-target editorial-large-copy px-2 select-none">
-          No Escamb.io, acreditamos que nenhum livro didático, periférico ou conhecimento acadêmico deve ficar esquecido na gaveta. Conectamos estudantes e professores para transformar o que você já tem no que você realmente precisa — de forma colaborativa, transparente e 100% livre de dinheiro real.
-        </p>
-      </div>
+        <!-- Editorial Large Manifesto Copy with Scrolled Text Highlight (Gt Alpina Condensed) -->
+        <div class="max-w-4xl mx-auto my-auto py-2 sm:py-6">
+          <p id="manifesto-text" class="font-alpina text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.32] sm:leading-[1.22] tracking-tight text-reveal-target editorial-large-copy px-2 select-none">
+            No Escamb.io, acreditamos que nenhum livro didático, periférico ou conhecimento acadêmico deve ficar esquecido na gaveta. Conectamos estudantes e professores para transformar o que você já tem no que você realmente precisa — de forma colaborativa, transparente e 100% livre de dinheiro real.
+          </p>
+        </div>
 
-      <!-- Scroll Action Hint with Anime.js icon bounce -->
-      <div class="mt-6 sm:mt-10 font-mono text-xs text-slate-400 flex items-center gap-2">
-        <i data-lucide="arrow-down" class="w-4 h-4 animate-smooth-float text-cyan-400" id="manifesto-arrow-cue"></i>
-        <span id="manifesto-cue-text">DESLIZE PARA REVELAR O MANIFESTO</span>
-      </div>
+        <!-- Scroll Action Hint with Anime.js icon bounce -->
+        <div class="mt-6 sm:mt-10 font-mono text-xs text-slate-400 flex items-center gap-2">
+          <i data-lucide="arrow-down" class="w-4 h-4 animate-smooth-float text-cyan-400" id="manifesto-arrow-cue"></i>
+          <span id="manifesto-cue-text">DESLIZE PARA REVELAR O MANIFESTO</span>
+        </div>
 
-    </section>
+      </section>
+    </div>
 
     <!-- SCENE 4: CINEMATIC 3-STEP FLOW DECK (Gt Alpina para Títulos, Season Sans para Descrições) -->
     <section id="como-funciona" class="cinematic-deck relative mx-2.5 sm:mx-6 md:mx-10 rounded-[2rem] sm:rounded-[3.5rem] p-5 sm:p-12 md:p-18 overflow-hidden shadow-2xl text-white font-sans" data-anime-scroll="steps" style="content-visibility: auto; contain-intrinsic-size: 1px 650px;">
@@ -1593,14 +1595,16 @@
       const targetElement = document.querySelector(targetSelector);
       if (!targetElement) return;
 
+      const scrollToEl = targetSelector === '#manifesto' ? (document.getElementById('manifesto-pin-wrapper') || targetElement) : targetElement;
+
       if (lenis && typeof lenis.scrollTo === 'function') {
-        lenis.scrollTo(targetElement, {
+        lenis.scrollTo(scrollToEl, {
           offset: offset,
           duration: duration,
           easing: (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
         });
       } else {
-        const top = targetElement.getBoundingClientRect().top + window.pageYOffset + offset;
+        const top = scrollToEl.getBoundingClientRect().top + window.pageYOffset + offset;
         window.scrollTo({
           top: top,
           behavior: 'smooth'
@@ -1966,7 +1970,7 @@
             progressBar.style.width = `${pct}%`;
           }
           if (progressPercent) {
-            progressPercent.textContent = `${pct}%`;
+            progressPercent.textContent = `${pct}% LIDO`;
           }
 
           if (ambientGlow) {
@@ -1974,7 +1978,7 @@
           }
 
           if (pct >= 100) {
-            if (cueText) cueText.innerHTML = '<span class="text-cyan-400 font-bold">MANIFESTO 100% CONCLUÍDO &bull; CIRCULAÇÃO ATIVA</span>';
+            if (cueText) cueText.innerHTML = '<span class="text-cyan-400 font-bold">MANIFESTO 100% CONCLUÍDO &bull; CONTINUE O SCROLL</span>';
             if (arrowCue) arrowCue.style.display = 'none';
 
             if (!isCelebrated && typeof anime !== 'undefined') {
@@ -1998,13 +2002,18 @@
           }
         }
 
-        // Use GSAP ScrollTrigger if available, otherwise optimized Lenis/rAF fallback
+        // Use GSAP ScrollTrigger with Pinning so Manifesto stays fixed on screen until 100% read
         if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+          const pinTrigger = document.getElementById('manifesto-pin-wrapper') || manifestoContainer;
+
           ScrollTrigger.create({
-            trigger: manifestoContainer,
-            start: 'top 78%',
-            end: 'bottom 25%',
-            scrub: true,
+            trigger: pinTrigger,
+            pin: true,
+            pinSpacing: true,
+            start: 'top top',
+            end: '+=180%',
+            scrub: 0.6,
+            anticipatePin: 1,
             onUpdate: (self) => {
               updateProgress(self.progress);
             }
