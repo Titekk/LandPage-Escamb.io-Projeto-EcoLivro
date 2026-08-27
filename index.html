@@ -28,19 +28,19 @@
     tailwind.config = {
       darkMode: 'class',
       theme: {
+        fontFamily: {
+          brand: ['"Geist Sans"'],
+          header: ['"Geist Mono"'],
+          mono: ['"Geist Mono"'],
+          alpina: ['"Gt Alpina Condensed"'],
+          editorial: ['"Gt Alpina Condensed"'],
+          display: ['"Gt Alpina Condensed"'],
+          sans: ['"Season Sans"'],
+          heading: ['"Gt Alpina Condensed"'],
+          body: ['"Season Sans"'],
+          table: ['"Season Sans"'],
+        },
         extend: {
-          fontFamily: {
-            brand: ['Geist Sans', 'Geist', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
-            header: ['Geist Mono', '"JetBrains Mono"', '"SF Mono"', 'Consolas', 'monospace'],
-            mono: ['Geist Mono', '"JetBrains Mono"', '"SF Mono"', 'Consolas', 'monospace'],
-            alpina: ['"Gt Alpina Condensed"', '"Franklin Gothic Medium"', '"Arial Narrow"', '"Trebuchet MS"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
-            editorial: ['"Gt Alpina Condensed"', '"Franklin Gothic Medium"', '"Arial Narrow"', '"Trebuchet MS"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
-            display: ['"Gt Alpina Condensed"', '"Franklin Gothic Medium"', '"Arial Narrow"', '"Trebuchet MS"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
-            sans: ['"Season Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Arial', 'sans-serif'],
-            heading: ['"Gt Alpina Condensed"', '"Franklin Gothic Medium"', '"Arial Narrow"', 'sans-serif'],
-            body: ['"Season Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Arial', 'sans-serif'],
-            table: ['"Season Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Arial', 'sans-serif'],
-          },
           colors: {
             void: '#000000',
             darkcard: '#080A0F',
@@ -78,14 +78,28 @@
   <style>
     @font-face {
       font-family: 'Gt Alpina Condensed';
-      src: local('Gt Alpina Condensed'), local('GT Alpina Condensed'), local('GTAlpina-Condensed'), local('Franklin Gothic Medium'), local('Arial Narrow');
-      font-weight: 300 900;
+      src: local('Gt Alpina Condensed'), local('GT Alpina Condensed'), local('GT Alpina'), local('GTAlpina-Condensed'), local('GTAlpinaCondensed-Bold'), local('GTAlpinaCondensed-Medium'), local('GTAlpinaCondensed-Regular');
+      font-weight: 100 900;
       font-display: swap;
     }
 
     @font-face {
       font-family: 'Season Sans';
-      src: local('Season Sans'), local('SeasonSans'), local('Arial');
+      src: local('Season Sans'), local('SeasonSans'), local('SeasonSans-Regular'), local('SeasonSans-Medium'), local('SeasonSans-Bold'), local('Season-Sans');
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Geist Sans';
+      src: local('Geist Sans'), local('Geist'), local('Geist-Regular'), local('Geist-Medium'), local('Geist-Bold');
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Geist Mono';
+      src: local('Geist Mono'), local('GeistMono'), local('GeistMono-Regular'), local('GeistMono-Medium'), local('GeistMono-Bold');
       font-weight: 100 900;
       font-display: swap;
     }
@@ -97,11 +111,21 @@
       --sar: env(safe-area-inset-right, 0px);
     }
 
+    /* Reset global de tipografia: Todo o site usa Season Sans para textos padrão */
+    *, *::before, *::after {
+      font-family: "Season Sans" !important;
+    }
+
     html, body {
       max-width: 100%;
       overflow-x: hidden;
       touch-action: pan-y;
       -webkit-tap-highlight-color: transparent;
+      font-family: "Season Sans" !important;
+      background-color: #000000;
+      color: #F1F5F9;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     html.lenis, html.lenis body {
@@ -117,18 +141,11 @@
       overflow: hidden;
     }
 
-    /* 1. General Site Typography: "Season Sans" for all body & small texts */
-    body {
-      font-family: "Season Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background-color: #000000;
-      color: #F1F5F9;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
     /* 1. Nome da Marca e Coisas Relacionadas à Marca: Geist Sans */
-    .font-brand {
-      font-family: 'Geist Sans', 'Geist', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    .font-brand,
+    .brand-logo,
+    .brand-title {
+      font-family: 'Geist Sans' !important;
       letter-spacing: -0.055em;
       font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     }
@@ -143,21 +160,27 @@
     header a:not(.font-brand),
     .header-link,
     .nav-mono,
-    .card-watermark {
-      font-family: 'Geist Mono', 'JetBrains Mono', 'SF Mono', Consolas, monospace !important;
+    .card-watermark,
+    kbd,
+    .badge-mono {
+      font-family: 'Geist Mono' !important;
       letter-spacing: -0.04em;
     }
 
     /* 3. Todos os Títulos, Subtítulos, Manifesto e Textos Grandes: Gt Alpina Condensed */
     .font-alpina,
     .font-editorial,
+    .font-heading,
+    .font-display,
+    h1, h2, h3, h4, h5, h6,
     .text-reveal-target,
     .editorial-large-copy,
     .hero-lead-text,
     .editorial-heading,
     .card-title,
-    .manifesto-word {
-      font-family: "Gt Alpina Condensed", "Franklin Gothic Medium", "Arial Narrow", "Trebuchet MS", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    .manifesto-word,
+    #manifesto-text {
+      font-family: 'Gt Alpina Condensed' !important;
       letter-spacing: -0.02em;
     }
 
@@ -168,8 +191,10 @@
     .card-desc,
     table, th, td,
     input, textarea, select,
-    .font-table {
-      font-family: "Season Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+    .font-table,
+    p:not(.font-alpina):not(.font-header):not(.font-mono),
+    li, a:not(.font-brand):not(.font-header):not(.font-mono) {
+      font-family: 'Season Sans' !important;
     }
 
     /* Mobile Adaptations & Safe Areas */
